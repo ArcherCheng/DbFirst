@@ -1,0 +1,33 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace AhrApi.Data
+{
+    public partial class Py1set40
+    {
+        public Py1set40()
+        {
+            Py1oth10 = new HashSet<Py1oth10>();
+            Py1oth20 = new HashSet<Py1oth20>();
+            Py1oth30 = new HashSet<Py1oth30>();
+            Py1tax10 = new HashSet<Py1tax10>();
+            Py1tax20 = new HashSet<Py1tax20>();
+            Py1tax30 = new HashSet<Py1tax30>();
+        }
+
+        public string TaxFg { get; set; }
+        public string Note1 { get; set; }
+        public string CrUser { get; set; }
+        public DateTime? CrDate { get; set; }
+        public string UpUser { get; set; }
+        public DateTime? UpDate { get; set; }
+        public byte? IdOver { get; set; }
+
+        public virtual ICollection<Py1oth10> Py1oth10 { get; set; }
+        public virtual ICollection<Py1oth20> Py1oth20 { get; set; }
+        public virtual ICollection<Py1oth30> Py1oth30 { get; set; }
+        public virtual ICollection<Py1tax10> Py1tax10 { get; set; }
+        public virtual ICollection<Py1tax20> Py1tax20 { get; set; }
+        public virtual ICollection<Py1tax30> Py1tax30 { get; set; }
+    }
+}

@@ -1,0 +1,91 @@
+
+1. install  detnet-ef tools and add relational package
+
+// 1.1 Install the .NetCoreSDK
+https://dotnet.microsoft.com/download
+
+
+// 1.2 install dotnet-ef tools
+dotnet tool install --global detnet-ef 
+
+// 1.3 add relational package to project 
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+// 1.4 check application.csproj add under PackageReference
+<ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+</ItemGroup>
+
+
+
+2. Verify installation
+// 2.1 安裝相關套件:
+dotnet restore
+
+// 2.2 檢視 EF 指令:
+dotnet ef
+
+
+3.generate entity from database
+
+3.1 ef cmd 1
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPos2;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o FoodPos/Data -f --project FoodPos.Data
+--error --project
+
+3.2 ef cmd 2 no --project 
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPos2;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o FoodPos/Data -f 
+
+3.3
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=hr4nice2010;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o AhrApi/Data -f 
+
+
+4. 安裝 controller Scaffolding tool
+// dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design
+dotnet tool install --global dotnet-aspnet-codegenerator
+dotnet tool update -g Dotnet-aspnet-codegenerator
+dotnet-aspnet-codegenerator controller -name TodoItemsController -async -api -m TodoItem -dc TodoContext -outDir Controllers
+
+上述命令：
+新增 Scaffolding 所需的 NuGet 套件。
+安裝 Scaffolding 引擎 (dotnet-aspnet-codegenerator)。
+Scaffold TodoItemsController。
+
+
+5.install agileObjects
+dotnet add package agileObjects.agileMapper
+應用:
+AgileObjects.AgileMapper.Mapper.Map(dto).Over(data);
+  
+var dto = AgileObjects.AgileMapper.Mapper.Map(user).ToANew<ApiUserData>(
+    cfg => cfg.Map((source, target) => source.Role.RoleName).To(target => target.UserRole)
+); 
+
+
+6. install newtonsoftJson 
+dotnet add package Microsoft.aspnetcore.mvc.newtonsoftJson
+
+Startup.cs 加入如下程式碼
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Json 會無限循環,產生錯誤
+        services.AddControllers().AddNewtonsoftJson(opt => 
+        {
+            opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        });
+    }
+}
+
+
+

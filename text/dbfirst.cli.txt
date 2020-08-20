@@ -1,0 +1,51 @@
+
+1. install tools and add relational package
+
+
+// 1.1 install dotnet-ef tools
+dotnet tool install --global detnet-ef 
+
+
+// 1.2 add relational package to project 
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+
+
+// 1.3 check application.csproj add under PackageReference
+<ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.5">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+</ItemGroup>
+
+
+// 1.4 Install the  .NetCoreSDK
+https://dotnet.microsoft.com/download
+
+
+
+2. Verify installation
+// 2.1 安裝相關套件:
+dotnet restore
+
+// 2.2 檢視 EF 指令:
+dotnet ef
+
+
+
+3.generate entity from database
+
+2.1 ef cmd 1
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPos2;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o FoodPos/Data -f --project FoodPos.Data
+--error --project
+
+2.2 ef cmd 2 no --project 
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPos2;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o FoodPos/Data -f 
+
