@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FoodPos.Data
+namespace DbFirst.FoodPos.Data
 {
     public partial class AppSysRoleController
     {

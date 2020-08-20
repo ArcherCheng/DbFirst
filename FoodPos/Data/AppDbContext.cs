@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace FoodPos.Data
+namespace DbFirst.FoodPos.Data
 {
     public partial class AppDbContext : DbContext
     {
@@ -52,18 +52,12 @@ namespace FoodPos.Data
         public virtual DbSet<ViewOrderDetailFoodWeekSum> ViewOrderDetailFoodWeekSum { get; set; }
         public virtual DbSet<ViewOrderTypeDaySum> ViewOrderTypeDaySum { get; set; }
         public virtual DbSet<ViewOrderTypeMonthSum> ViewOrderTypeMonthSum { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswer1M> ViewQuestionnaireAnswer1M { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswer1W> ViewQuestionnaireAnswer1W { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswer1Y> ViewQuestionnaireAnswer1Y { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswer2Y> ViewQuestionnaireAnswer2Y { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswer3M> ViewQuestionnaireAnswer3M { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswer6M> ViewQuestionnaireAnswer6M { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswerAll> ViewQuestionnaireAnswerAll { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount1M> ViewQuestionnaireAnswerCount1M { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount1W> ViewQuestionnaireAnswerCount1W { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount1Y> ViewQuestionnaireAnswerCount1Y { get; set; }
+        public virtual DbSet<ViewQuestionnaireAnswerCount2M> ViewQuestionnaireAnswerCount2M { get; set; }
+        public virtual DbSet<ViewQuestionnaireAnswerCount2W> ViewQuestionnaireAnswerCount2W { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount2Y> ViewQuestionnaireAnswerCount2Y { get; set; }
-        public virtual DbSet<ViewQuestionnaireAnswerCount3M> ViewQuestionnaireAnswerCount3M { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount6M> ViewQuestionnaireAnswerCount6M { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCountAll> ViewQuestionnaireAnswerCountAll { get; set; }
 
@@ -483,6 +477,8 @@ namespace FoodPos.Data
 
                 entity.Property(e => e.DutyNo).HasMaxLength(10);
 
+                entity.Property(e => e.IsDelete).HasColumnName("isDelete");
+
                 entity.Property(e => e.Notes).HasMaxLength(100);
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime");
@@ -600,6 +596,9 @@ namespace FoodPos.Data
                     .HasName("Questionnaire_Index2")
                     .IsUnique()
                     .HasFilter("([InvoiceId] IS NOT NULL)");
+
+                entity.HasIndex(e => e.WriteTime)
+                    .HasName("Questionnaire_Index3");
 
                 entity.Property(e => e.DiscountDate).HasColumnType("datetime");
 
@@ -838,12 +837,12 @@ namespace FoodPos.Data
 
                 entity.ToView("ViewOrderTypeDaySum");
 
-                entity.Property(e => e.OrderDate)
+                entity.Property(e => e.InvoiceDate)
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
                 entity.Property(e => e.OrderType)
-                    .IsRequired()
+                    .HasColumnName("orderType")
                     .HasMaxLength(50);
             });
 
@@ -853,139 +852,13 @@ namespace FoodPos.Data
 
                 entity.ToView("ViewOrderTypeMonthSum");
 
-                entity.Property(e => e.OrderDate)
+                entity.Property(e => e.InvoiceMonth)
                     .HasMaxLength(7)
                     .IsUnicode(false);
 
                 entity.Property(e => e.OrderType)
-                    .IsRequired()
+                    .HasColumnName("orderType")
                     .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ViewQuestionnaireAnswer1M>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewQuestionnaireAnswer1M");
-
-                entity.Property(e => e.AnswerDesc)
-                    .IsRequired()
-                    .HasColumnName("answerDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionDesc)
-                    .HasColumnName("questionDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionId).HasColumnName("questionId");
-            });
-
-            modelBuilder.Entity<ViewQuestionnaireAnswer1W>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewQuestionnaireAnswer1W");
-
-                entity.Property(e => e.AnswerDesc)
-                    .IsRequired()
-                    .HasColumnName("answerDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionDesc)
-                    .HasColumnName("questionDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionId).HasColumnName("questionId");
-            });
-
-            modelBuilder.Entity<ViewQuestionnaireAnswer1Y>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewQuestionnaireAnswer1Y");
-
-                entity.Property(e => e.AnswerDesc)
-                    .IsRequired()
-                    .HasColumnName("answerDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionDesc)
-                    .HasColumnName("questionDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionId).HasColumnName("questionId");
-            });
-
-            modelBuilder.Entity<ViewQuestionnaireAnswer2Y>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewQuestionnaireAnswer2Y");
-
-                entity.Property(e => e.AnswerDesc)
-                    .IsRequired()
-                    .HasColumnName("answerDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionDesc)
-                    .HasColumnName("questionDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionId).HasColumnName("questionId");
-            });
-
-            modelBuilder.Entity<ViewQuestionnaireAnswer3M>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewQuestionnaireAnswer3M");
-
-                entity.Property(e => e.AnswerDesc)
-                    .IsRequired()
-                    .HasColumnName("answerDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionDesc)
-                    .HasColumnName("questionDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionId).HasColumnName("questionId");
-            });
-
-            modelBuilder.Entity<ViewQuestionnaireAnswer6M>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewQuestionnaireAnswer6M");
-
-                entity.Property(e => e.AnswerDesc)
-                    .IsRequired()
-                    .HasColumnName("answerDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionDesc)
-                    .HasColumnName("questionDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionId).HasColumnName("questionId");
-            });
-
-            modelBuilder.Entity<ViewQuestionnaireAnswerAll>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewQuestionnaireAnswerAll");
-
-                entity.Property(e => e.AnswerDesc)
-                    .IsRequired()
-                    .HasColumnName("answerDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionDesc)
-                    .HasColumnName("questionDesc")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.QuestionId).HasColumnName("questionId");
             });
 
             modelBuilder.Entity<ViewQuestionnaireAnswerCount1M>(entity =>
@@ -993,6 +866,12 @@ namespace FoodPos.Data
                 entity.HasNoKey();
 
                 entity.ToView("ViewQuestionnaireAnswerCount1M");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewQuestionnaireAnswerCount1W>(entity =>
@@ -1000,6 +879,12 @@ namespace FoodPos.Data
                 entity.HasNoKey();
 
                 entity.ToView("ViewQuestionnaireAnswerCount1W");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewQuestionnaireAnswerCount1Y>(entity =>
@@ -1007,6 +892,38 @@ namespace FoodPos.Data
                 entity.HasNoKey();
 
                 entity.ToView("ViewQuestionnaireAnswerCount1Y");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ViewQuestionnaireAnswerCount2M>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewQuestionnaireAnswerCount2M");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ViewQuestionnaireAnswerCount2W>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewQuestionnaireAnswerCount2W");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewQuestionnaireAnswerCount2Y>(entity =>
@@ -1014,13 +931,12 @@ namespace FoodPos.Data
                 entity.HasNoKey();
 
                 entity.ToView("ViewQuestionnaireAnswerCount2Y");
-            });
 
-            modelBuilder.Entity<ViewQuestionnaireAnswerCount3M>(entity =>
-            {
-                entity.HasNoKey();
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.ToView("ViewQuestionnaireAnswerCount3M");
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewQuestionnaireAnswerCount6M>(entity =>
@@ -1028,6 +944,12 @@ namespace FoodPos.Data
                 entity.HasNoKey();
 
                 entity.ToView("ViewQuestionnaireAnswerCount6M");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewQuestionnaireAnswerCountAll>(entity =>
@@ -1035,6 +957,12 @@ namespace FoodPos.Data
                 entity.HasNoKey();
 
                 entity.ToView("ViewQuestionnaireAnswerCountAll");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FoodPos.Data
+namespace DbFirst.FoodPos.Data
 {
-    public partial class ViewQuestionnaireAnswerAll
+    public partial class ViewQuestionnaireAnswerCount2W
     {
         public int? QuestionId { get; set; }
         public string QuestionDesc { get; set; }

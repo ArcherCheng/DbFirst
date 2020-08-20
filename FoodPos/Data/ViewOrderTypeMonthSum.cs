@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FoodPos.Data
+namespace DbFirst.FoodPos.Data
 {
     public partial class ViewOrderTypeMonthSum
     {
-        public string OrderDate { get; set; }
+        public string InvoiceMonth { get; set; }
         public string OrderType { get; set; }
         public int? OrderCounts { get; set; }
         public int? TotalDetailAmt { get; set; }

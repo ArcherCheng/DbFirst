@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FoodPos.Data
+namespace DbFirst.FoodPos.Data
 {
     public partial class OrderMaster
     {
@@ -27,6 +27,7 @@ namespace FoodPos.Data
         public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
+        public bool? IsDelete { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
     }
