@@ -43,7 +43,7 @@ dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPos2;Truste
 --error --project
 
 3.2 ef cmd 2 no --project 
-dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPos2;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o FoodPos/Data -f 
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPos;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o FoodPos/Domain -f 
 
 3.3
 dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=hr4nice2010;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o AhrApi/Data -f 

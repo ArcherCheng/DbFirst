@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 
-namespace DbFirst.FoodPos.Data
+namespace FoodPos.Data
 {
     public partial class AppDbContext : DbContext
     {
