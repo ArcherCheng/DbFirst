@@ -7,6 +7,7 @@ namespace FoodPos.Domain
     {
         public int RoleId { get; set; }
         public int PermissionId { get; set; }
+        public bool IsPermit { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }

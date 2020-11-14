@@ -11,8 +11,8 @@ namespace FoodPos.Domain
         }
 
         public int PermissionId { get; set; }
-        public string PermissionApi { get; set; }
         public string PermissionDesc { get; set; }
+        public string HttpApi { get; set; }
         public string HttpMethod { get; set; }
         public string AreaName { get; set; }
         public string ControllerName { get; set; }

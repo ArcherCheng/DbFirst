@@ -16,7 +16,6 @@ namespace FoodPos.Domain
         public string Phone { get; set; }
         public DateTime? Birthday { get; set; }
         public string MainPhoto { get; set; }
-        public int? RoleId { get; set; }
         public string UserData { get; set; }
         public bool? IsOnOff { get; set; }
         public byte[] PasswordHash { get; set; }

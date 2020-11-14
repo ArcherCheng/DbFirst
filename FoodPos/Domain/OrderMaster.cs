@@ -33,7 +33,6 @@ namespace FoodPos.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual Invoice Invoice { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
     }
 }

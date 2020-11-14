@@ -15,8 +15,6 @@ namespace FoodPos.Domain
         {
         }
 
-        public virtual DbSet<AppKeyCode> AppKeyCode { get; set; }
-        public virtual DbSet<AppKeySystem> AppKeySystem { get; set; }
         public virtual DbSet<AppLogRequest> AppLogRequest { get; set; }
         public virtual DbSet<AppLogTable> AppLogTable { get; set; }
         public virtual DbSet<AppSysPermission> AppSysPermission { get; set; }
@@ -28,6 +26,8 @@ namespace FoodPos.Domain
         public virtual DbSet<Food> Food { get; set; }
         public virtual DbSet<FoodOff> FoodOff { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
+        public virtual DbSet<KeyCode> KeyCode { get; set; }
+        public virtual DbSet<KeySystem> KeySystem { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<OrderDetailAddOn> OrderDetailAddOn { get; set; }
         public virtual DbSet<OrderMaster> OrderMaster { get; set; }
@@ -38,8 +38,6 @@ namespace FoodPos.Domain
         public virtual DbSet<Questionnaire> Questionnaire { get; set; }
         public virtual DbSet<QuestionnaireAnswer> QuestionnaireAnswer { get; set; }
         public virtual DbSet<TypeAddOn> TypeAddOn { get; set; }
-        public virtual DbSet<ViewAppKeyCodeGroup> ViewAppKeyCodeGroup { get; set; }
-        public virtual DbSet<ViewAppKeySystemGroup> ViewAppKeySystemGroup { get; set; }
         public virtual DbSet<ViewCustomerDiscount> ViewCustomerDiscount { get; set; }
         public virtual DbSet<ViewCustomerOrderSum> ViewCustomerOrderSum { get; set; }
         public virtual DbSet<ViewCustomerOrderSum30D> ViewCustomerOrderSum30D { get; set; }
@@ -48,6 +46,8 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewInvoiceSumDate> ViewInvoiceSumDate { get; set; }
         public virtual DbSet<ViewInvoiceSumMonth> ViewInvoiceSumMonth { get; set; }
         public virtual DbSet<ViewInvoiceSumYear> ViewInvoiceSumYear { get; set; }
+        public virtual DbSet<ViewKeyCodeGroup> ViewKeyCodeGroup { get; set; }
+        public virtual DbSet<ViewKeySystemGroup> ViewKeySystemGroup { get; set; }
         public virtual DbSet<ViewOrderDetail> ViewOrderDetail { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumDate> ViewOrderDetailFoodSumDate { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumDay1M> ViewOrderDetailFoodSumDay1M { get; set; }
@@ -90,68 +90,6 @@ namespace FoodPos.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AppKeyCode>(entity =>
-            {
-                entity.HasIndex(e => new { e.AppCodeGroup, e.AppCodeValue })
-                    .HasName("AppKeyCode_Index1")
-                    .IsUnique();
-
-                entity.Property(e => e.AppCodeGroup)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.AppCodeLabel)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.AppCodeValue)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Notes).HasMaxLength(100);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<AppKeySystem>(entity =>
-            {
-                entity.HasIndex(e => e.AppSysKey)
-                    .HasName("AppKeySystem_Index1")
-                    .IsUnique();
-
-                entity.Property(e => e.AppSysGroup)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.AppSysKey)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.AppSysLabel)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.AppSysValue)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Notes).HasMaxLength(100);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
-            });
-
             modelBuilder.Entity<AppLogRequest>(entity =>
             {
                 entity.Property(e => e.Destination).HasMaxLength(250);
@@ -188,21 +126,32 @@ namespace FoodPos.Domain
                     .HasName("AppSysPermission_Key");
 
                 entity.HasIndex(e => new { e.ControllerName, e.ActionName })
-                    .HasName("AppSysPermission_Index1");
+                    .HasName("AppSysPermission_Index1")
+                    .IsUnique();
 
-                entity.Property(e => e.ActionName).HasMaxLength(50);
+                entity.HasIndex(e => new { e.HttpApi, e.HttpMethod })
+                    .HasName("AppSysPermission_Index2")
+                    .IsUnique();
+
+                entity.Property(e => e.ActionName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.AreaName).HasMaxLength(50);
 
-                entity.Property(e => e.ControllerName).HasMaxLength(50);
+                entity.Property(e => e.ControllerName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.ExternalUrl).HasMaxLength(250);
 
-                entity.Property(e => e.HttpMethod).HasMaxLength(50);
-
-                entity.Property(e => e.PermissionApi)
+                entity.Property(e => e.HttpApi)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.Property(e => e.HttpMethod)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.PermissionDesc).HasMaxLength(250);
 
@@ -224,6 +173,8 @@ namespace FoodPos.Domain
                     .HasName("AppSysRole_Index1")
                     .IsUnique();
 
+                entity.Property(e => e.Note1).HasMaxLength(100);
+
                 entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -235,11 +186,6 @@ namespace FoodPos.Domain
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
-
-                entity.HasOne(d => d.Parent)
-                    .WithMany(p => p.InverseParent)
-                    .HasForeignKey(d => d.ParentId)
-                    .HasConstraintName("AppSysRole_ParentId");
             });
 
             modelBuilder.Entity<AppSysRolePermission>(entity =>
@@ -474,6 +420,64 @@ namespace FoodPos.Domain
                     .HasConstraintName("Invoice_Promotion");
             });
 
+            modelBuilder.Entity<KeyCode>(entity =>
+            {
+                entity.HasIndex(e => new { e.KeyCodeGroup, e.KeyCodeValue })
+                    .HasName("KeyCode_Index1")
+                    .IsUnique();
+
+                entity.Property(e => e.KeyCodeGroup)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.KeyCodeLabel)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.KeyCodeValue)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Notes).HasMaxLength(100);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<KeySystem>(entity =>
+            {
+                entity.Property(e => e.KeySystemCode)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.KeySystemGroup)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.KeySystemLabel)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.KeySystemValue)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Notes).HasMaxLength(100);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<OrderDetail>(entity =>
             {
                 entity.HasKey(e => e.DetailId)
@@ -549,11 +553,6 @@ namespace FoodPos.Domain
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
-
-                entity.HasOne(d => d.Invoice)
-                    .WithMany(p => p.OrderMaster)
-                    .HasForeignKey(d => d.InvoiceId)
-                    .HasConstraintName("OrderMaster_Invoice");
             });
 
             modelBuilder.Entity<Promotion>(entity =>
@@ -744,28 +743,6 @@ namespace FoodPos.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<ViewAppKeyCodeGroup>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewAppKeyCodeGroup");
-
-                entity.Property(e => e.AppCodeGroup)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ViewAppKeySystemGroup>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewAppKeySystemGroup");
-
-                entity.Property(e => e.AppSysGroup)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
             modelBuilder.Entity<ViewCustomerDiscount>(entity =>
             {
                 entity.HasNoKey();
@@ -860,6 +837,29 @@ namespace FoodPos.Domain
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(4)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ViewKeyCodeGroup>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewKeyCodeGroup");
+
+                entity.Property(e => e.KeyCodeGroup)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ViewKeySystemGroup>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewKeySystemGroup");
+
+                entity.Property(e => e.KeySystemGroup)
+                    .IsRequired()
+                    .HasColumnName("keySystemGroup")
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewOrderDetail>(entity =>

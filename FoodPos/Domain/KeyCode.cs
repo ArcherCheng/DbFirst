@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
-    public partial class AppKeyCode
+    public partial class KeyCode
     {
         public int Id { get; set; }
-        public string AppCodeGroup { get; set; }
-        public string AppCodeValue { get; set; }
-        public string AppCodeLabel { get; set; }
+        public string KeyCodeGroup { get; set; }
+        public string KeyCodeValue { get; set; }
+        public string KeyCodeLabel { get; set; }
         public int DisplayOrder { get; set; }
         public string Notes { get; set; }
         public int? WriteType { get; set; }
