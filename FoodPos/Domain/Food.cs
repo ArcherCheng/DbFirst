@@ -15,7 +15,7 @@ namespace FoodPos.Domain
         public string FoodName { get; set; }
         public string FoodType { get; set; }
         public string Unit { get; set; }
-        public int SortSeq { get; set; }
+        public int SortNo { get; set; }
         public int CostPrice { get; set; }
         public int SalePrice { get; set; }
         public int OffPrice { get; set; }
