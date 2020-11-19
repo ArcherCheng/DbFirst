@@ -6,9 +6,9 @@ namespace FoodPos.Domain
     public partial class KeyCode
     {
         public int Id { get; set; }
-        public string KeyCodeGroup { get; set; }
-        public string KeyCodeValue { get; set; }
-        public string KeyCodeLabel { get; set; }
+        public string CodeGroup { get; set; }
+        public string CodeValue { get; set; }
+        public string CodeLabel { get; set; }
         public int SortNo { get; set; }
         public string Notes { get; set; }
         public int? WriteType { get; set; }

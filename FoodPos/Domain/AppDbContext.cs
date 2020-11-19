@@ -421,19 +421,19 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<KeyCode>(entity =>
             {
-                entity.HasIndex(e => new { e.KeyCodeGroup, e.KeyCodeValue })
+                entity.HasIndex(e => new { e.CodeGroup, e.CodeValue })
                     .HasName("KeyCode_Index1")
                     .IsUnique();
 
-                entity.Property(e => e.KeyCodeGroup)
+                entity.Property(e => e.CodeGroup)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.KeyCodeLabel)
+                entity.Property(e => e.CodeLabel)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.KeyCodeValue)
+                entity.Property(e => e.CodeValue)
                     .IsRequired()
                     .HasMaxLength(50);
 
@@ -450,23 +450,27 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<KeySystem>(entity =>
             {
-                entity.Property(e => e.KeySystemCode)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.KeySystemGroup)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.KeySystemLabel)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.KeySystemValue)
-                    .IsRequired()
-                    .HasMaxLength(50);
+                entity.HasIndex(e => e.SystemCode)
+                    .HasName("KeySystem_Index1")
+                    .IsUnique();
 
                 entity.Property(e => e.Notes).HasMaxLength(100);
+
+                entity.Property(e => e.SystemCode)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SystemGroup)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SystemLabel)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SystemValue)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
