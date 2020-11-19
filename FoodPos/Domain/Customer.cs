@@ -8,6 +8,7 @@ namespace FoodPos.Domain
         public Customer()
         {
             Invoice = new HashSet<Invoice>();
+            Questionnaire = new HashSet<Questionnaire>();
         }
 
         public int CustomerId { get; set; }
@@ -26,5 +27,6 @@ namespace FoodPos.Domain
         public string WriteIp { get; set; }
 
         public virtual ICollection<Invoice> Invoice { get; set; }
+        public virtual ICollection<Questionnaire> Questionnaire { get; set; }
     }
 }

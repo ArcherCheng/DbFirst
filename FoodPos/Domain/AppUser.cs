@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
-    public partial class AppSysUser
+    public partial class AppUser
     {
-        public AppSysUser()
+        public AppUser()
         {
-            AppSysRoleUser = new HashSet<AppSysRoleUser>();
+            AppRoleUser = new HashSet<AppRoleUser>();
         }
 
         public int UserId { get; set; }
@@ -28,6 +28,6 @@ namespace FoodPos.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual ICollection<AppSysRoleUser> AppSysRoleUser { get; set; }
+        public virtual ICollection<AppRoleUser> AppRoleUser { get; set; }
     }
 }

@@ -17,11 +17,11 @@ namespace FoodPos.Domain
 
         public virtual DbSet<AppLogRequest> AppLogRequest { get; set; }
         public virtual DbSet<AppLogTable> AppLogTable { get; set; }
-        public virtual DbSet<AppSysPermission> AppSysPermission { get; set; }
-        public virtual DbSet<AppSysRole> AppSysRole { get; set; }
-        public virtual DbSet<AppSysRolePermission> AppSysRolePermission { get; set; }
-        public virtual DbSet<AppSysRoleUser> AppSysRoleUser { get; set; }
-        public virtual DbSet<AppSysUser> AppSysUser { get; set; }
+        public virtual DbSet<AppPermission> AppPermission { get; set; }
+        public virtual DbSet<AppRole> AppRole { get; set; }
+        public virtual DbSet<AppRolePermission> AppRolePermission { get; set; }
+        public virtual DbSet<AppRoleUser> AppRoleUser { get; set; }
+        public virtual DbSet<AppUser> AppUser { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Food> Food { get; set; }
         public virtual DbSet<FoodOff> FoodOff { get; set; }
@@ -111,17 +111,17 @@ namespace FoodPos.Domain
                     .HasDefaultValueSql("(getdate())");
             });
 
-            modelBuilder.Entity<AppSysPermission>(entity =>
+            modelBuilder.Entity<AppPermission>(entity =>
             {
                 entity.HasKey(e => e.PermissionId)
-                    .HasName("AppSysPermission_Key");
+                    .HasName("AppPermission_Key");
 
                 entity.HasIndex(e => new { e.ControllerName, e.ActionName })
-                    .HasName("AppSysPermission_Index1")
+                    .HasName("AppPermission_Index1")
                     .IsUnique();
 
                 entity.HasIndex(e => new { e.HttpApi, e.HttpMethod })
-                    .HasName("AppSysPermission_Index2")
+                    .HasName("AppPermission_Index2")
                     .IsUnique();
 
                 entity.Property(e => e.ActionName)
@@ -155,13 +155,13 @@ namespace FoodPos.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<AppSysRole>(entity =>
+            modelBuilder.Entity<AppRole>(entity =>
             {
                 entity.HasKey(e => e.RoleId)
-                    .HasName("AppSysRole_Key");
+                    .HasName("AppRole_Key");
 
                 entity.HasIndex(e => e.RoleName)
-                    .HasName("AppSysRole_Index1")
+                    .HasName("AppRole_Index1")
                     .IsUnique();
 
                 entity.Property(e => e.Note1).HasMaxLength(100);
@@ -179,10 +179,11 @@ namespace FoodPos.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<AppSysRolePermission>(entity =>
+            modelBuilder.Entity<AppRolePermission>(entity =>
             {
-                entity.HasKey(e => new { e.RoleId, e.PermissionId })
-                    .HasName("AppSysRolePermission_Key");
+                entity.HasIndex(e => new { e.RoleId, e.PermissionId })
+                    .HasName("AppRolePermission_Index1")
+                    .IsUnique();
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -193,22 +194,23 @@ namespace FoodPos.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
 
                 entity.HasOne(d => d.Permission)
-                    .WithMany(p => p.AppSysRolePermission)
+                    .WithMany(p => p.AppRolePermission)
                     .HasForeignKey(d => d.PermissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("AppSysRolePermission_AppSysPermission");
+                    .HasConstraintName("AppRolePermission_AppPermission");
 
                 entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AppSysRolePermission)
+                    .WithMany(p => p.AppRolePermission)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("AppSysRolePermission_AppSysRole");
+                    .HasConstraintName("AppRolePermission_AppRole");
             });
 
-            modelBuilder.Entity<AppSysRoleUser>(entity =>
+            modelBuilder.Entity<AppRoleUser>(entity =>
             {
-                entity.HasKey(e => new { e.RoleId, e.UserId })
-                    .HasName("AppSysRoleUser_Key");
+                entity.HasIndex(e => new { e.RoleId, e.UserId })
+                    .HasName("AppRoleUser_Index1")
+                    .IsUnique();
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -219,29 +221,29 @@ namespace FoodPos.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
 
                 entity.HasOne(d => d.Role)
-                    .WithMany(p => p.AppSysRoleUser)
+                    .WithMany(p => p.AppRoleUser)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("AppSysRoleUser_AppSysRole");
+                    .HasConstraintName("AppRoleUser_AppRole");
 
                 entity.HasOne(d => d.User)
-                    .WithMany(p => p.AppSysRoleUser)
+                    .WithMany(p => p.AppRoleUser)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("AppSysRoleUser_AppSysUser");
+                    .HasConstraintName("AppRoleUser_AppUser");
             });
 
-            modelBuilder.Entity<AppSysUser>(entity =>
+            modelBuilder.Entity<AppUser>(entity =>
             {
                 entity.HasKey(e => e.UserId)
-                    .HasName("AppSysUser_Key");
+                    .HasName("AppUser_Key");
 
                 entity.HasIndex(e => e.Email)
-                    .HasName("AppSysUser_Index1")
+                    .HasName("AppUser_Index1")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Phone)
-                    .HasName("AppSysUser_Index2")
+                    .HasName("AppUser_Index2")
                     .IsUnique();
 
                 entity.Property(e => e.Birthday).HasColumnType("date");
@@ -375,8 +377,14 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<Invoice>(entity =>
             {
+                entity.HasIndex(e => e.QuestionnaireId)
+                    .HasName("Invoice_Index2")
+                    .IsUnique()
+                    .HasFilter("([QuestionnaireId] IS NOT NULL)");
+
                 entity.HasIndex(e => new { e.InvoiceNo1, e.InvoiceNo2 })
-                    .HasName("Invoice_Index1");
+                    .HasName("Invoice_Index1")
+                    .IsUnique();
 
                 entity.Property(e => e.InvoiceBigMonth)
                     .IsRequired()
@@ -635,24 +643,15 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<Questionnaire>(entity =>
             {
-                entity.HasIndex(e => e.DiscountGuid)
-                    .HasName("Questionnaire_Index1")
-                    .IsUnique()
-                    .HasFilter("([DiscountGuid] IS NOT NULL)");
+                entity.HasIndex(e => e.CustomerId)
+                    .HasName("Questionnaire_Index2");
 
                 entity.HasIndex(e => e.InvoiceId)
-                    .HasName("Questionnaire_Index2")
+                    .HasName("Questionnaire_Index1")
                     .IsUnique()
                     .HasFilter("([InvoiceId] IS NOT NULL)");
 
-                entity.HasIndex(e => e.WriteTime)
-                    .HasName("Questionnaire_Index3");
-
                 entity.Property(e => e.DiscountDate).HasColumnType("datetime");
-
-                entity.Property(e => e.DiscountGuid)
-                    .IsRequired()
-                    .HasMaxLength(50);
 
                 entity.Property(e => e.DiscountType)
                     .IsRequired()
@@ -667,6 +666,11 @@ namespace FoodPos.Domain
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Questionnaire)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("Questionnaire_Customer");
 
                 entity.HasOne(d => d.Invoice)
                     .WithOne(p => p.Questionnaire)
@@ -742,13 +746,11 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.DiscountDate).HasColumnType("datetime");
 
-                entity.Property(e => e.DiscountGuid)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.DiscountType)
                     .IsRequired()
                     .HasMaxLength(1);
+
+                entity.Property(e => e.QuestionnaireId).ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<ViewCustomerOrderSum>(entity =>

@@ -17,8 +17,8 @@ namespace FoodPos.Domain
         {
             if (!optionsBuilder.IsConfigured)
             {
-                string connString = Helper.AppSettingsHelper.Configuration["ConnectionStrings:DefaultConnection"];
-                optionsBuilder.UseSqlServer(connString);
+                // string connString = Helper.AppSettingsHelper.Configuration["ConnectionStrings:DefaultConnection"];
+                // optionsBuilder.UseSqlServer(connString);
                 ////顯示SQL語法指令
                 //optionsBuilder.UseLoggerFactory(MyLoggerFactory); 
             }
