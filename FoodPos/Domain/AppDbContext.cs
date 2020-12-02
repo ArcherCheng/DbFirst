@@ -22,14 +22,16 @@ namespace FoodPos.Domain
         public virtual DbSet<AppRolePermission> AppRolePermission { get; set; }
         public virtual DbSet<AppRoleUser> AppRoleUser { get; set; }
         public virtual DbSet<AppUser> AppUser { get; set; }
+        public virtual DbSet<CheckoutAddon> CheckoutAddon { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Food> Food { get; set; }
         public virtual DbSet<FoodOff> FoodOff { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
+        public virtual DbSet<InvoiceAddon> InvoiceAddon { get; set; }
         public virtual DbSet<KeyCode> KeyCode { get; set; }
         public virtual DbSet<KeySystem> KeySystem { get; set; }
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
-        public virtual DbSet<OrderDetailAddOn> OrderDetailAddOn { get; set; }
+        public virtual DbSet<OrderDetailAddon> OrderDetailAddon { get; set; }
         public virtual DbSet<OrderMaster> OrderMaster { get; set; }
         public virtual DbSet<Promotion> Promotion { get; set; }
         public virtual DbSet<Question> Question { get; set; }
@@ -37,7 +39,7 @@ namespace FoodPos.Domain
         public virtual DbSet<QuestionDiscount> QuestionDiscount { get; set; }
         public virtual DbSet<Questionnaire> Questionnaire { get; set; }
         public virtual DbSet<QuestionnaireAnswer> QuestionnaireAnswer { get; set; }
-        public virtual DbSet<TypeAddOn> TypeAddOn { get; set; }
+        public virtual DbSet<TypeAddon> TypeAddon { get; set; }
         public virtual DbSet<ViewCustomerDiscount> ViewCustomerDiscount { get; set; }
         public virtual DbSet<ViewCustomerOrderSum> ViewCustomerOrderSum { get; set; }
         public virtual DbSet<ViewCustomerOrderSum30D> ViewCustomerOrderSum30D { get; set; }
@@ -78,6 +80,15 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewQuestionnaireAnswerCount2Y> ViewQuestionnaireAnswerCount2Y { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount6M> ViewQuestionnaireAnswerCount6M { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCountAll> ViewQuestionnaireAnswerCountAll { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("server=(local)\\SqlExpress;database=foodPos2;Trusted_Connection=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -283,6 +294,28 @@ namespace FoodPos.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<CheckoutAddon>(entity =>
+            {
+                entity.HasKey(e => e.AddonId)
+                    .HasName("CheckoutAddon_Key");
+
+                entity.HasIndex(e => e.AddonName)
+                    .HasName("CheckoutAddon_Index1")
+                    .IsUnique();
+
+                entity.Property(e => e.AddonName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Customer>(entity =>
             {
                 entity.HasIndex(e => e.CustomerName)
@@ -419,6 +452,29 @@ namespace FoodPos.Domain
                     .HasConstraintName("Invoice_Promotion");
             });
 
+            modelBuilder.Entity<InvoiceAddon>(entity =>
+            {
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(50);
+
+                entity.HasOne(d => d.Addon)
+                    .WithMany(p => p.InvoiceAddon)
+                    .HasForeignKey(d => d.AddonId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("InvoiceAddon_CheckoutAddon");
+
+                entity.HasOne(d => d.Invoice)
+                    .WithMany(p => p.InvoiceAddon)
+                    .HasForeignKey(d => d.InvoiceId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("InvoiceAddon_IOnvoice");
+            });
+
             modelBuilder.Entity<KeyCode>(entity =>
             {
                 entity.HasIndex(e => new { e.CodeGroup, e.CodeValue })
@@ -450,17 +506,17 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<KeySystem>(entity =>
             {
-                entity.HasIndex(e => e.SystemCode)
+                entity.HasIndex(e => e.SystemKey)
                     .HasName("KeySystem_Index1")
                     .IsUnique();
 
                 entity.Property(e => e.Notes).HasMaxLength(100);
 
-                entity.Property(e => e.SystemCode)
+                entity.Property(e => e.SystemGroup)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.SystemGroup)
+                entity.Property(e => e.SystemKey)
                     .IsRequired()
                     .HasMaxLength(50);
 
@@ -509,7 +565,7 @@ namespace FoodPos.Domain
                     .HasConstraintName("OrderDetail_OrderMaster");
             });
 
-            modelBuilder.Entity<OrderDetailAddOn>(entity =>
+            modelBuilder.Entity<OrderDetailAddon>(entity =>
             {
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -519,17 +575,17 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
 
-                entity.HasOne(d => d.AddOn)
-                    .WithMany(p => p.OrderDetailAddOn)
-                    .HasForeignKey(d => d.AddOnId)
+                entity.HasOne(d => d.Addon)
+                    .WithMany(p => p.OrderDetailAddon)
+                    .HasForeignKey(d => d.AddonId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("OrderDetailAddOn_TypeAddOn");
+                    .HasConstraintName("OrderDetailAddon_TypeAddon");
 
                 entity.HasOne(d => d.Detail)
-                    .WithMany(p => p.OrderDetailAddOn)
+                    .WithMany(p => p.OrderDetailAddon)
                     .HasForeignKey(d => d.DetailId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("OrderDetailAddOn_OrderDetail");
+                    .HasConstraintName("OrderDetailAddon_OrderDetail");
             });
 
             modelBuilder.Entity<OrderMaster>(entity =>
@@ -556,6 +612,11 @@ namespace FoodPos.Domain
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
+
+                entity.HasOne(d => d.Invoice)
+                    .WithMany(p => p.OrderMaster)
+                    .HasForeignKey(d => d.InvoiceId)
+                    .HasConstraintName("OrderMaster_Invoice");
             });
 
             modelBuilder.Entity<Promotion>(entity =>
@@ -650,12 +711,21 @@ namespace FoodPos.Domain
                 entity.HasIndex(e => e.CustomerId)
                     .HasName("Questionnaire_Index2");
 
+                entity.HasIndex(e => e.DiscountGuid)
+                    .HasName("Questionnaire_Index3")
+                    .IsUnique()
+                    .HasFilter("([DiscountGuid] IS NOT NULL)");
+
                 entity.HasIndex(e => e.InvoiceId)
                     .HasName("Questionnaire_Index1")
                     .IsUnique()
                     .HasFilter("([InvoiceId] IS NOT NULL)");
 
                 entity.Property(e => e.DiscountDate).HasColumnType("datetime");
+
+                entity.Property(e => e.DiscountGuid)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.DiscountType)
                     .IsRequired()
@@ -716,20 +786,20 @@ namespace FoodPos.Domain
                     .HasConstraintName("QuestionnaireAnswer_Questionnaire");
             });
 
-            modelBuilder.Entity<TypeAddOn>(entity =>
+            modelBuilder.Entity<TypeAddon>(entity =>
             {
-                entity.HasKey(e => e.AddOnId)
-                    .HasName("TypeAddOn_Key");
+                entity.HasKey(e => e.AddonId)
+                    .HasName("TypeAddon_Key");
 
-                entity.HasIndex(e => new { e.AddOnType, e.AddOnName })
-                    .HasName("TypeAddOn_Index1")
+                entity.HasIndex(e => new { e.AddonType, e.AddonName })
+                    .HasName("TypeAddon_Index1")
                     .IsUnique();
 
-                entity.Property(e => e.AddOnName)
+                entity.Property(e => e.AddonName)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.AddOnType)
+                entity.Property(e => e.AddonType)
                     .IsRequired()
                     .HasMaxLength(50);
 
@@ -842,7 +912,7 @@ namespace FoodPos.Domain
 
                 entity.ToView("ViewKeyCodeGroup");
 
-                entity.Property(e => e.KeyCodeGroup)
+                entity.Property(e => e.CodeGroup)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -853,9 +923,8 @@ namespace FoodPos.Domain
 
                 entity.ToView("ViewKeySystemGroup");
 
-                entity.Property(e => e.KeySystemGroup)
+                entity.Property(e => e.SystemGroup)
                     .IsRequired()
-                    .HasColumnName("keySystemGroup")
                     .HasMaxLength(50);
             });
 

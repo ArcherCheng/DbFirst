@@ -7,7 +7,7 @@ namespace FoodPos.Domain
     {
         public OrderDetail()
         {
-            OrderDetailAddOn = new HashSet<OrderDetailAddOn>();
+            OrderDetailAddon = new HashSet<OrderDetailAddon>();
         }
 
         public int DetailId { get; set; }
@@ -17,7 +17,7 @@ namespace FoodPos.Domain
         public int Qty { get; set; }
         public int SalePrice { get; set; }
         public int OffPrice { get; set; }
-        public int AddOnPrice { get; set; }
+        public int AddonPrice { get; set; }
         public int DetailAmt { get; set; }
         public int CookStep { get; set; }
         public bool IsCookOver { get; set; }
@@ -29,6 +29,6 @@ namespace FoodPos.Domain
 
         public virtual Food Food { get; set; }
         public virtual OrderMaster Order { get; set; }
-        public virtual ICollection<OrderDetailAddOn> OrderDetailAddOn { get; set; }
+        public virtual ICollection<OrderDetailAddon> OrderDetailAddon { get; set; }
     }
 }

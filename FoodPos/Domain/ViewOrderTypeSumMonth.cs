@@ -11,6 +11,6 @@ namespace FoodPos.Domain
         public int? OrderAmt { get; set; }
         public int? SalePriceSum { get; set; }
         public int? OffPriceSum { get; set; }
-        public int? AddOnPriceSum { get; set; }
+        public int? AddonPriceSum { get; set; }
     }
 }

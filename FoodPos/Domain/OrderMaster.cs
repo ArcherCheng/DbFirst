@@ -18,7 +18,7 @@ namespace FoodPos.Domain
         public int TableNo { get; set; }
         public int SalePriceSum { get; set; }
         public int OffPriceSum { get; set; }
-        public int AddOnPriceSum { get; set; }
+        public int AddonPriceSum { get; set; }
         public int OrderAmt { get; set; }
         public int? InvoiceId { get; set; }
         public string Notes { get; set; }
@@ -33,6 +33,7 @@ namespace FoodPos.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
+        public virtual Invoice Invoice { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
     }
 }

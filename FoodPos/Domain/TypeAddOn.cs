@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
-    public partial class TypeAddOn
+    public partial class TypeAddon
     {
-        public TypeAddOn()
+        public TypeAddon()
         {
-            OrderDetailAddOn = new HashSet<OrderDetailAddOn>();
+            InvoiceAddon = new HashSet<InvoiceAddon>();
+            OrderDetailAddon = new HashSet<OrderDetailAddon>();
         }
 
-        public int AddOnId { get; set; }
-        public string AddOnType { get; set; }
-        public string AddOnName { get; set; }
+        public int AddonId { get; set; }
+        public string AddonType { get; set; }
+        public string AddonName { get; set; }
         public int AddPrice { get; set; }
         public int SortNo { get; set; }
         public int? WriteType { get; set; }
@@ -20,6 +21,7 @@ namespace FoodPos.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual ICollection<OrderDetailAddOn> OrderDetailAddOn { get; set; }
+        public virtual ICollection<InvoiceAddon> InvoiceAddon { get; set; }
+        public virtual ICollection<OrderDetailAddon> OrderDetailAddon { get; set; }
     }
 }

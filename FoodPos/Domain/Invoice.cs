@@ -5,6 +5,12 @@ namespace FoodPos.Domain
 {
     public partial class Invoice
     {
+        public Invoice()
+        {
+            InvoiceAddon = new HashSet<InvoiceAddon>();
+            OrderMaster = new HashSet<OrderMaster>();
+        }
+
         public int InvoiceId { get; set; }
         public int TotalOrderAmt { get; set; }
         public string InvoiceNo1 { get; set; }
@@ -30,5 +36,7 @@ namespace FoodPos.Domain
         public virtual Customer Customer { get; set; }
         public virtual Promotion Promotion { get; set; }
         public virtual Questionnaire Questionnaire { get; set; }
+        public virtual ICollection<InvoiceAddon> InvoiceAddon { get; set; }
+        public virtual ICollection<OrderMaster> OrderMaster { get; set; }
     }
 }

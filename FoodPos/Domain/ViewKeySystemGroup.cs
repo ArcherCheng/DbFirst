@@ -5,6 +5,6 @@ namespace FoodPos.Domain
 {
     public partial class ViewKeySystemGroup
     {
-        public string KeySystemGroup { get; set; }
+        public string SystemGroup { get; set; }
     }
 }

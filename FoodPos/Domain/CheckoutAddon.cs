@@ -3,17 +3,15 @@ using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
-    public partial class OrderDetailAddon
+    public partial class CheckoutAddon
     {
-        public int Id { get; set; }
-        public int DetailId { get; set; }
         public int AddonId { get; set; }
+        public string AddonName { get; set; }
+        public int AddPrice { get; set; }
+        public int SortNo { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
-
-        public virtual TypeAddon Addon { get; set; }
-        public virtual OrderDetail Detail { get; set; }
     }
 }
