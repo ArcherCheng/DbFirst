@@ -18,7 +18,7 @@ namespace FoodPos.Domain
         public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
-        
+
         public virtual ICollection<InvoiceAddon> InvoiceAddon { get; set; }
     }
 }
