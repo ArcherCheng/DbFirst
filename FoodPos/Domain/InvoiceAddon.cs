@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
@@ -14,7 +13,7 @@ namespace FoodPos.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual TypeAddon Addon { get; set; }
+        public virtual CheckoutAddon Addon { get; set; }
         public virtual Invoice Invoice { get; set; }
     }
 }

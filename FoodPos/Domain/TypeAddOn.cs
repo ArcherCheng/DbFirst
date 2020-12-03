@@ -7,7 +7,6 @@ namespace FoodPos.Domain
     {
         public TypeAddon()
         {
-            InvoiceAddon = new HashSet<InvoiceAddon>();
             OrderDetailAddon = new HashSet<OrderDetailAddon>();
         }
 
@@ -20,8 +19,7 @@ namespace FoodPos.Domain
         public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
-
-        public virtual ICollection<InvoiceAddon> InvoiceAddon { get; set; }
+        
         public virtual ICollection<OrderDetailAddon> OrderDetailAddon { get; set; }
     }
 }
