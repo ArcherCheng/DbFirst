@@ -23,7 +23,7 @@ namespace FoodPos.Domain
         public int CookMinutes { get; set; }
         public int CleanMinutes { get; set; }
         public bool IsMainFood { get; set; }
-        public bool InSale { get; set; }
+        public bool IsSale { get; set; }
         public string PicturePath { get; set; }
         public string PictureFile { get; set; }
         public string Notes { get; set; }

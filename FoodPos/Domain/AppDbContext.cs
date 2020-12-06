@@ -80,6 +80,8 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewQuestionnaireAnswerCount2Y> ViewQuestionnaireAnswerCount2Y { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount6M> ViewQuestionnaireAnswerCount6M { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCountAll> ViewQuestionnaireAnswerCountAll { get; set; }
+        public virtual DbSet<ViewQuestionnaireAnswerCountByMonth> ViewQuestionnaireAnswerCountByMonth { get; set; }
+        public virtual DbSet<ViewQuestionnaireAnswerMonth> ViewQuestionnaireAnswerMonth { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -595,6 +597,8 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
 
                 entity.Property(e => e.StoreName).HasMaxLength(50);
+
+                entity.Property(e => e.TableNo).HasMaxLength(50);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -1292,10 +1296,37 @@ namespace FoodPos.Domain
                 entity.Property(e => e.QuestionDesc).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<ViewQuestionnaireAnswerCountByMonth>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewQuestionnaireAnswerCountByMonth");
+
+                entity.Property(e => e.AnswerDesc)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.AnswerMonth)
+                    .HasMaxLength(7)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.QuestionDesc).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ViewQuestionnaireAnswerMonth>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewQuestionnaireAnswerMonth");
+
+                entity.Property(e => e.AnswerMonth)
+                    .HasMaxLength(7)
+                    .IsUnicode(false);
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-
 }
