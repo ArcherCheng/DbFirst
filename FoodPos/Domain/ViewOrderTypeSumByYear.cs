@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
-    public partial class ViewOrderTypeSumDate
+    public partial class ViewOrderTypeSumByYear
     {
         public string GroupUnit { get; set; }
         public string OrderType { get; set; }

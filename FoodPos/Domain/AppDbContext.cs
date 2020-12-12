@@ -26,6 +26,7 @@ namespace FoodPos.Domain
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Food> Food { get; set; }
         public virtual DbSet<FoodOff> FoodOff { get; set; }
+        public virtual DbSet<FoodTypeAddon> FoodTypeAddon { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
         public virtual DbSet<InvoiceAddon> InvoiceAddon { get; set; }
         public virtual DbSet<KeyCode> KeyCode { get; set; }
@@ -39,19 +40,20 @@ namespace FoodPos.Domain
         public virtual DbSet<QuestionDiscount> QuestionDiscount { get; set; }
         public virtual DbSet<Questionnaire> Questionnaire { get; set; }
         public virtual DbSet<QuestionnaireAnswer> QuestionnaireAnswer { get; set; }
-        public virtual DbSet<TypeAddon> TypeAddon { get; set; }
         public virtual DbSet<ViewCustomerDiscount> ViewCustomerDiscount { get; set; }
         public virtual DbSet<ViewCustomerOrderSum> ViewCustomerOrderSum { get; set; }
         public virtual DbSet<ViewCustomerOrderSum30D> ViewCustomerOrderSum30D { get; set; }
         public virtual DbSet<ViewCustomerOrderSumAll> ViewCustomerOrderSumAll { get; set; }
         public virtual DbSet<ViewFoodOffMaxOffDate> ViewFoodOffMaxOffDate { get; set; }
-        public virtual DbSet<ViewInvoiceSumDate> ViewInvoiceSumDate { get; set; }
-        public virtual DbSet<ViewInvoiceSumMonth> ViewInvoiceSumMonth { get; set; }
-        public virtual DbSet<ViewInvoiceSumYear> ViewInvoiceSumYear { get; set; }
+        public virtual DbSet<ViewInvoiceSumByDate> ViewInvoiceSumByDate { get; set; }
+        public virtual DbSet<ViewInvoiceSumByMonth> ViewInvoiceSumByMonth { get; set; }
+        public virtual DbSet<ViewInvoiceSumByYear> ViewInvoiceSumByYear { get; set; }
         public virtual DbSet<ViewKeyCodeGroup> ViewKeyCodeGroup { get; set; }
         public virtual DbSet<ViewKeySystemGroup> ViewKeySystemGroup { get; set; }
         public virtual DbSet<ViewOrderDetail> ViewOrderDetail { get; set; }
-        public virtual DbSet<ViewOrderDetailFoodSumDate> ViewOrderDetailFoodSumDate { get; set; }
+        public virtual DbSet<ViewOrderDetailFoodSumByDate> ViewOrderDetailFoodSumByDate { get; set; }
+        public virtual DbSet<ViewOrderDetailFoodSumByMonth> ViewOrderDetailFoodSumByMonth { get; set; }
+        public virtual DbSet<ViewOrderDetailFoodSumByYear> ViewOrderDetailFoodSumByYear { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumDay1M> ViewOrderDetailFoodSumDay1M { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumDay1Y> ViewOrderDetailFoodSumDay1Y { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumDay2M> ViewOrderDetailFoodSumDay2M { get; set; }
@@ -59,7 +61,6 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewOrderDetailFoodSumDay3M> ViewOrderDetailFoodSumDay3M { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumDay6M> ViewOrderDetailFoodSumDay6M { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumDayAll> ViewOrderDetailFoodSumDayAll { get; set; }
-        public virtual DbSet<ViewOrderDetailFoodSumMonth> ViewOrderDetailFoodSumMonth { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumWeekDay1M> ViewOrderDetailFoodSumWeekDay1M { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumWeekDay1W> ViewOrderDetailFoodSumWeekDay1W { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumWeekDay1Y> ViewOrderDetailFoodSumWeekDay1Y { get; set; }
@@ -68,10 +69,9 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewOrderDetailFoodSumWeekDay2Y> ViewOrderDetailFoodSumWeekDay2Y { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumWeekDay6M> ViewOrderDetailFoodSumWeekDay6M { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumWeekDayAll> ViewOrderDetailFoodSumWeekDayAll { get; set; }
-        public virtual DbSet<ViewOrderDetailFoodSumYear> ViewOrderDetailFoodSumYear { get; set; }
-        public virtual DbSet<ViewOrderTypeSumDate> ViewOrderTypeSumDate { get; set; }
-        public virtual DbSet<ViewOrderTypeSumMonth> ViewOrderTypeSumMonth { get; set; }
-        public virtual DbSet<ViewOrderTypeSumYear> ViewOrderTypeSumYear { get; set; }
+        public virtual DbSet<ViewOrderTypeSumByDate> ViewOrderTypeSumByDate { get; set; }
+        public virtual DbSet<ViewOrderTypeSumByMonth> ViewOrderTypeSumByMonth { get; set; }
+        public virtual DbSet<ViewOrderTypeSumByYear> ViewOrderTypeSumByYear { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount1M> ViewQuestionnaireAnswerCount1M { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount1W> ViewQuestionnaireAnswerCount1W { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCount1Y> ViewQuestionnaireAnswerCount1Y { get; set; }
@@ -401,16 +401,41 @@ namespace FoodPos.Domain
                     .HasConstraintName("FoodOff_Food");
             });
 
+            modelBuilder.Entity<FoodTypeAddon>(entity =>
+            {
+                entity.HasKey(e => e.AddonId)
+                    .HasName("FoodTypeAddon_Key");
+
+                entity.HasIndex(e => new { e.AddonType, e.AddonName })
+                    .HasName("FoodTypeAddon_Index1")
+                    .IsUnique();
+
+                entity.Property(e => e.AddonName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.AddonType)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Invoice>(entity =>
             {
                 entity.HasIndex(e => e.QuestionnaireId)
-                    .HasName("Invoice_Index2")
+                    .HasName("Invoice_Index1")
                     .IsUnique()
                     .HasFilter("([QuestionnaireId] IS NOT NULL)");
 
                 entity.HasIndex(e => new { e.InvoiceNo1, e.InvoiceNo2 })
-                    .HasName("Invoice_Index1")
-                    .IsUnique();
+                    .HasName("Invoice_Index2");
 
                 entity.Property(e => e.InvoiceBigMonth)
                     .IsRequired()
@@ -572,7 +597,7 @@ namespace FoodPos.Domain
                     .WithMany(p => p.OrderDetailAddon)
                     .HasForeignKey(d => d.AddonId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("OrderDetailAddon_TypeAddon");
+                    .HasConstraintName("OrderDetailAddon_FoodTypeAddon");
 
                 entity.HasOne(d => d.Detail)
                     .WithMany(p => p.OrderDetailAddon)
@@ -781,32 +806,6 @@ namespace FoodPos.Domain
                     .HasConstraintName("QuestionnaireAnswer_Questionnaire");
             });
 
-            modelBuilder.Entity<TypeAddon>(entity =>
-            {
-                entity.HasKey(e => e.AddonId)
-                    .HasName("TypeAddon_Key");
-
-                entity.HasIndex(e => new { e.AddonType, e.AddonName })
-                    .HasName("TypeAddon_Index1")
-                    .IsUnique();
-
-                entity.Property(e => e.AddonName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.AddonType)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
-            });
-
             modelBuilder.Entity<ViewCustomerDiscount>(entity =>
             {
                 entity.HasNoKey();
@@ -868,33 +867,33 @@ namespace FoodPos.Domain
                 entity.Property(e => e.OffDate).HasColumnType("date");
             });
 
-            modelBuilder.Entity<ViewInvoiceSumDate>(entity =>
+            modelBuilder.Entity<ViewInvoiceSumByDate>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewInvoiceSumDate");
+                entity.ToView("ViewInvoiceSumByDate");
 
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(10)
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<ViewInvoiceSumMonth>(entity =>
+            modelBuilder.Entity<ViewInvoiceSumByMonth>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewInvoiceSumMonth");
+                entity.ToView("ViewInvoiceSumByMonth");
 
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(7)
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<ViewInvoiceSumYear>(entity =>
+            modelBuilder.Entity<ViewInvoiceSumByYear>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewInvoiceSumYear");
+                entity.ToView("ViewInvoiceSumByYear");
 
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(4)
@@ -934,11 +933,11 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<ViewOrderDetailFoodSumDate>(entity =>
+            modelBuilder.Entity<ViewOrderDetailFoodSumByDate>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewOrderDetailFoodSumDate");
+                entity.ToView("ViewOrderDetailFoodSumByDate");
 
                 entity.Property(e => e.FoodName).HasMaxLength(50);
 
@@ -946,6 +945,36 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(10)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ViewOrderDetailFoodSumByMonth>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewOrderDetailFoodSumByMonth");
+
+                entity.Property(e => e.FoodName).HasMaxLength(50);
+
+                entity.Property(e => e.FoodType).HasMaxLength(50);
+
+                entity.Property(e => e.GroupUnit)
+                    .HasMaxLength(7)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<ViewOrderDetailFoodSumByYear>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewOrderDetailFoodSumByYear");
+
+                entity.Property(e => e.FoodName).HasMaxLength(50);
+
+                entity.Property(e => e.FoodType).HasMaxLength(50);
+
+                entity.Property(e => e.GroupUnit)
+                    .HasMaxLength(4)
                     .IsUnicode(false);
             });
 
@@ -1024,21 +1053,6 @@ namespace FoodPos.Domain
                 entity.Property(e => e.FoodName).HasMaxLength(50);
 
                 entity.Property(e => e.FoodType).HasMaxLength(50);
-            });
-
-            modelBuilder.Entity<ViewOrderDetailFoodSumMonth>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewOrderDetailFoodSumMonth");
-
-                entity.Property(e => e.FoodName).HasMaxLength(50);
-
-                entity.Property(e => e.FoodType).HasMaxLength(50);
-
-                entity.Property(e => e.GroupUnit)
-                    .HasMaxLength(7)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<ViewOrderDetailFoodSumWeekDay1M>(entity =>
@@ -1129,26 +1143,11 @@ namespace FoodPos.Domain
                 entity.Property(e => e.FoodType).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<ViewOrderDetailFoodSumYear>(entity =>
+            modelBuilder.Entity<ViewOrderTypeSumByDate>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewOrderDetailFoodSumYear");
-
-                entity.Property(e => e.FoodName).HasMaxLength(50);
-
-                entity.Property(e => e.FoodType).HasMaxLength(50);
-
-                entity.Property(e => e.GroupUnit)
-                    .HasMaxLength(4)
-                    .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<ViewOrderTypeSumDate>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("ViewOrderTypeSumDate");
+                entity.ToView("ViewOrderTypeSumByDate");
 
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(10)
@@ -1160,11 +1159,11 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<ViewOrderTypeSumMonth>(entity =>
+            modelBuilder.Entity<ViewOrderTypeSumByMonth>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewOrderTypeSumMonth");
+                entity.ToView("ViewOrderTypeSumByMonth");
 
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(7)
@@ -1176,11 +1175,11 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<ViewOrderTypeSumYear>(entity =>
+            modelBuilder.Entity<ViewOrderTypeSumByYear>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewOrderTypeSumYear");
+                entity.ToView("ViewOrderTypeSumByYear");
 
                 entity.Property(e => e.GroupUnit)
                     .HasMaxLength(4)

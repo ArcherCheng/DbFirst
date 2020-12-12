@@ -25,7 +25,7 @@ namespace FoodPos.Domain
         public int PromotionAmt { get; set; }
         public int ServiceAmt { get; set; }
         public int AddonAmt { get; set; }
-        public int NetOrderAmt { get; set; }
+        public int InvoiceAmt { get; set; }
         public string Notes { get; set; }
         public bool IsDelete { get; set; }
         public int? WriteType { get; set; }

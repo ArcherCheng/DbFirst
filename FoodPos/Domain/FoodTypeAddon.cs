@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
-    public partial class TypeAddon
+    public partial class FoodTypeAddon
     {
-        public TypeAddon()
+        public FoodTypeAddon()
         {
             OrderDetailAddon = new HashSet<OrderDetailAddon>();
         }

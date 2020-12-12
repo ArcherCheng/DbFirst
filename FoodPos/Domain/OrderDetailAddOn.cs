@@ -13,7 +13,7 @@ namespace FoodPos.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual TypeAddon Addon { get; set; }
+        public virtual FoodTypeAddon Addon { get; set; }
         public virtual OrderDetail Detail { get; set; }
     }
 }
