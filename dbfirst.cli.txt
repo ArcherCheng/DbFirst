@@ -48,6 +48,10 @@ dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=foodPosTest;Tru
 3.3
 dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=hr4nice2010;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o AhrApi/Data -f 
 
+3.4 party2021
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=party2021;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o Party/Domain -f 
+
+
 
 4. 安裝 controller Scaffolding tool
 // dotnet add package Microsoft.EntityFrameworkCore.Design
