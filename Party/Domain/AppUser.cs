@@ -8,11 +8,14 @@ namespace JustDo.Party.Domain
         public AppUser()
         {
             AppRoleUser = new HashSet<AppRoleUser>();
-            MessagesRecipient = new HashSet<Messages>();
-            MessagesSender = new HashSet<Messages>();
             PartyUser = new HashSet<PartyUser>();
+            PartyUserMsgRecipient = new HashSet<PartyUserMsg>();
+            PartyUserMsgSender = new HashSet<PartyUserMsg>();
             PartyVoteLiker = new HashSet<PartyVote>();
             PartyVoteVote = new HashSet<PartyVote>();
+            UserMsgRecipient = new HashSet<UserMsg>();
+            UserMsgSender = new HashSet<UserMsg>();
+            UserPhoto = new HashSet<UserPhoto>();
         }
 
         public int UserId { get; set; }
@@ -67,11 +70,15 @@ namespace JustDo.Party.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
+        public virtual UserCondition UserCondition { get; set; }
         public virtual ICollection<AppRoleUser> AppRoleUser { get; set; }
-        public virtual ICollection<Messages> MessagesRecipient { get; set; }
-        public virtual ICollection<Messages> MessagesSender { get; set; }
         public virtual ICollection<PartyUser> PartyUser { get; set; }
+        public virtual ICollection<PartyUserMsg> PartyUserMsgRecipient { get; set; }
+        public virtual ICollection<PartyUserMsg> PartyUserMsgSender { get; set; }
         public virtual ICollection<PartyVote> PartyVoteLiker { get; set; }
         public virtual ICollection<PartyVote> PartyVoteVote { get; set; }
+        public virtual ICollection<UserMsg> UserMsgRecipient { get; set; }
+        public virtual ICollection<UserMsg> UserMsgSender { get; set; }
+        public virtual ICollection<UserPhoto> UserPhoto { get; set; }
     }
 }

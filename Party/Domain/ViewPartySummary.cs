@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JustDo.Party.Domain
 {
-    public partial class ViewPartyUserSummary
+    public partial class ViewPartySummary
     {
         public int PartyId { get; set; }
         public string PartyName { get; set; }

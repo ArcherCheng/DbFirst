@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace JustDo.Party.Domain
 {
-    public partial class ViewPartyUserSumAll
+    public partial class ViewPartySumAll
     {
         public int PartyId { get; set; }
         public int? TotalPersons { get; set; }

@@ -24,19 +24,22 @@ namespace JustDo.Party.Domain
         public virtual DbSet<AppUser> AppUser { get; set; }
         public virtual DbSet<KeyCode> KeyCode { get; set; }
         public virtual DbSet<KeySystem> KeySystem { get; set; }
-        public virtual DbSet<Messages> Messages { get; set; }
-        public virtual DbSet<PartyDate> PartyDate { get; set; }
+        public virtual DbSet<PartyData> PartyData { get; set; }
         public virtual DbSet<PartyMsg> PartyMsg { get; set; }
         public virtual DbSet<PartyPhoto> PartyPhoto { get; set; }
         public virtual DbSet<PartySample> PartySample { get; set; }
         public virtual DbSet<PartyUser> PartyUser { get; set; }
+        public virtual DbSet<PartyUserMsg> PartyUserMsg { get; set; }
         public virtual DbSet<PartyVote> PartyVote { get; set; }
-        public virtual DbSet<ViewPartyUserMatchUser> ViewPartyUserMatchUser { get; set; }
-        public virtual DbSet<ViewPartyUserMatches> ViewPartyUserMatches { get; set; }
-        public virtual DbSet<ViewPartyUserSumAll> ViewPartyUserSumAll { get; set; }
-        public virtual DbSet<ViewPartyUserSumBoy> ViewPartyUserSumBoy { get; set; }
-        public virtual DbSet<ViewPartyUserSumGirl> ViewPartyUserSumGirl { get; set; }
-        public virtual DbSet<ViewPartyUserSummary> ViewPartyUserSummary { get; set; }
+        public virtual DbSet<UserCondition> UserCondition { get; set; }
+        public virtual DbSet<UserMsg> UserMsg { get; set; }
+        public virtual DbSet<UserPhoto> UserPhoto { get; set; }
+        public virtual DbSet<ViewPartyMatchUser> ViewPartyMatchUser { get; set; }
+        public virtual DbSet<ViewPartyMatches> ViewPartyMatches { get; set; }
+        public virtual DbSet<ViewPartySumAll> ViewPartySumAll { get; set; }
+        public virtual DbSet<ViewPartySumBoy> ViewPartySumBoy { get; set; }
+        public virtual DbSet<ViewPartySumGirl> ViewPartySumGirl { get; set; }
+        public virtual DbSet<ViewPartySummary> ViewPartySummary { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -355,48 +358,13 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Messages>(entity =>
-            {
-                entity.HasIndex(e => new { e.RecipientId, e.SenderId })
-                    .HasName("messages_index2");
-
-                entity.HasIndex(e => new { e.SenderId, e.RecipientId })
-                    .HasName("messages_index1");
-
-                entity.Property(e => e.Contents)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.ReadDate).HasColumnType("datetime");
-
-                entity.Property(e => e.SendDate).HasColumnType("datetime");
-
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(32);
-
-                entity.HasOne(d => d.Recipient)
-                    .WithMany(p => p.MessagesRecipient)
-                    .HasForeignKey(d => d.RecipientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Messages_Recipient");
-
-                entity.HasOne(d => d.Sender)
-                    .WithMany(p => p.MessagesSender)
-                    .HasForeignKey(d => d.SenderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Message_Sender");
-            });
-
-            modelBuilder.Entity<PartyDate>(entity =>
+            modelBuilder.Entity<PartyData>(entity =>
             {
                 entity.HasKey(e => e.PartyId)
-                    .HasName("PartyDate_Key");
+                    .HasName("PartyData_Key");
 
-                entity.HasIndex(e => e.PartyDate1)
-                    .HasName("PartyDate_index1");
+                entity.HasIndex(e => e.PartyDate)
+                    .HasName("PartyData_index1");
 
                 entity.Property(e => e.AddressNo).HasMaxLength(120);
 
@@ -414,9 +382,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.Notes).HasMaxLength(250);
 
-                entity.Property(e => e.PartyDate1)
-                    .HasColumnName("PartyDate")
-                    .HasColumnType("date");
+                entity.Property(e => e.PartyDate).HasColumnType("date");
 
                 entity.Property(e => e.PartyName)
                     .IsRequired()
@@ -542,13 +508,48 @@ namespace JustDo.Party.Domain
                     .WithMany(p => p.PartyUser)
                     .HasForeignKey(d => d.PartyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PartyUser_PartyDate");
+                    .HasConstraintName("PartyUser_PartyData");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.PartyUser)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("PartyUser_AppUser");
+            });
+
+            modelBuilder.Entity<PartyUserMsg>(entity =>
+            {
+                entity.HasIndex(e => new { e.RecipientId, e.SenderId })
+                    .HasName("PartyUserMsg_index2");
+
+                entity.HasIndex(e => new { e.SenderId, e.RecipientId })
+                    .HasName("PartyUserMsg_index1");
+
+                entity.Property(e => e.Contents)
+                    .IsRequired()
+                    .HasMaxLength(2000);
+
+                entity.Property(e => e.ReadDate).HasColumnType("datetime");
+
+                entity.Property(e => e.SendDate).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteIp).HasMaxLength(32);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(32);
+
+                entity.HasOne(d => d.Recipient)
+                    .WithMany(p => p.PartyUserMsgRecipient)
+                    .HasForeignKey(d => d.RecipientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PartyUserMsg_Recipient");
+
+                entity.HasOne(d => d.Sender)
+                    .WithMany(p => p.PartyUserMsgSender)
+                    .HasForeignKey(d => d.SenderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PartyUserMsg_Sender");
             });
 
             modelBuilder.Entity<PartyVote>(entity =>
@@ -574,7 +575,7 @@ namespace JustDo.Party.Domain
                     .WithMany(p => p.PartyVote)
                     .HasForeignKey(d => d.PartyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PartyVote_PartyDate");
+                    .HasConstraintName("PartyVote_PartyData");
 
                 entity.HasOne(d => d.Vote)
                     .WithMany(p => p.PartyVoteVote)
@@ -583,46 +584,132 @@ namespace JustDo.Party.Domain
                     .HasConstraintName("PartyVote_VoteId");
             });
 
-            modelBuilder.Entity<ViewPartyUserMatchUser>(entity =>
+            modelBuilder.Entity<UserCondition>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.UserId)
+                    .HasName("UserCondition_key");
 
-                entity.ToView("ViewPartyUserMatchUser");
+                entity.Property(e => e.UserId).ValueGeneratedNever();
+
+                entity.Property(e => e.BloodInclude).HasMaxLength(16);
+
+                entity.Property(e => e.CityInclude).HasMaxLength(128);
+
+                entity.Property(e => e.JobTypeInclude).HasMaxLength(128);
+
+                entity.Property(e => e.ReligionInclude).HasMaxLength(128);
+
+                entity.Property(e => e.StarInclude).HasMaxLength(128);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(32);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(32);
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.UserCondition)
+                    .HasForeignKey<UserCondition>(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserCondition_AppUser");
             });
 
-            modelBuilder.Entity<ViewPartyUserMatches>(entity =>
+            modelBuilder.Entity<UserMsg>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasIndex(e => new { e.RecipientId, e.SenderId })
+                    .HasName("UserMsg_index2");
 
-                entity.ToView("ViewPartyUserMatches");
+                entity.HasIndex(e => new { e.SenderId, e.RecipientId })
+                    .HasName("UserMsg_index1");
+
+                entity.Property(e => e.Contents)
+                    .IsRequired()
+                    .HasMaxLength(2000);
+
+                entity.Property(e => e.ReadDate).HasColumnType("datetime");
+
+                entity.Property(e => e.SendDate).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteIp).HasMaxLength(32);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(32);
+
+                entity.HasOne(d => d.Recipient)
+                    .WithMany(p => p.UserMsgRecipient)
+                    .HasForeignKey(d => d.RecipientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserMsg_Recipient");
+
+                entity.HasOne(d => d.Sender)
+                    .WithMany(p => p.UserMsgSender)
+                    .HasForeignKey(d => d.SenderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserMsg_Sender");
             });
 
-            modelBuilder.Entity<ViewPartyUserSumAll>(entity =>
+            modelBuilder.Entity<UserPhoto>(entity =>
             {
-                entity.HasNoKey();
+                entity.Property(e => e.Descriptions).HasMaxLength(250);
 
-                entity.ToView("ViewPartyUserSumAll");
+                entity.Property(e => e.PhotoUrl).HasMaxLength(250);
+
+                entity.Property(e => e.PublicId).HasMaxLength(250);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(32);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(32);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserPhoto)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserPhoto_AppUser");
             });
 
-            modelBuilder.Entity<ViewPartyUserSumBoy>(entity =>
+            modelBuilder.Entity<ViewPartyMatchUser>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewPartyUserSumBoy");
+                entity.ToView("ViewPartyMatchUser");
             });
 
-            modelBuilder.Entity<ViewPartyUserSumGirl>(entity =>
+            modelBuilder.Entity<ViewPartyMatches>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewPartyUserSumGirl");
+                entity.ToView("ViewPartyMatches");
             });
 
-            modelBuilder.Entity<ViewPartyUserSummary>(entity =>
+            modelBuilder.Entity<ViewPartySumAll>(entity =>
             {
                 entity.HasNoKey();
 
-                entity.ToView("ViewPartyUserSummary");
+                entity.ToView("ViewPartySumAll");
+            });
+
+            modelBuilder.Entity<ViewPartySumBoy>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewPartySumBoy");
+            });
+
+            modelBuilder.Entity<ViewPartySumGirl>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewPartySumGirl");
+            });
+
+            modelBuilder.Entity<ViewPartySummary>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewPartySummary");
 
                 entity.Property(e => e.PartyDate).HasColumnType("date");
 

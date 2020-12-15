@@ -15,7 +15,7 @@ namespace JustDo.Party.Domain
         public string WriteIp { get; set; }
 
         public virtual AppUser Liker { get; set; }
-        public virtual PartyDate Party { get; set; }
+        public virtual PartyData Party { get; set; }
         public virtual AppUser Vote { get; set; }
     }
 }

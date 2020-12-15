@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace JustDo.Party.Domain
 {
-    public partial class ViewPartyUserMatchUser
+    public partial class ViewPartyMatches
     {
         public int Partyid { get; set; }
-        public int VoteId { get; set; }
-        public int LikerId { get; set; }
+        public int? TotalMatchs { get; set; }
+        public int? TotalVotes { get; set; }
     }
 }
