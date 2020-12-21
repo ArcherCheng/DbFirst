@@ -213,6 +213,8 @@ namespace JustDo.Party.Domain
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.EmailVerifyCode).HasMaxLength(250);
+
                 entity.Property(e => e.IsOffUser).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.LoginDate).HasColumnType("datetime");
@@ -228,6 +230,8 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.Phone)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.PhoneVerifyCode).HasMaxLength(250);
 
                 entity.Property(e => e.UserData).HasMaxLength(100);
 
@@ -629,8 +633,6 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.Country).HasMaxLength(50);
 
-                entity.Property(e => e.EmailCode).HasMaxLength(250);
-
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -654,8 +656,6 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.NickName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.PhoneCode).HasMaxLength(50);
 
                 entity.Property(e => e.Religion).HasMaxLength(50);
 

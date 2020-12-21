@@ -43,8 +43,6 @@ namespace JustDo.Party.Domain
         public string BankNumber6 { get; set; }
         public bool IsCloseData { get; set; }
         public bool IsClosePhoto { get; set; }
-        public string PhoneCode { get; set; }
-        public string EmailCode { get; set; }
         public string IdPhoto11Url { get; set; }
         public string IdPhoto12Url { get; set; }
         public string JobPhotoUrl { get; set; }
