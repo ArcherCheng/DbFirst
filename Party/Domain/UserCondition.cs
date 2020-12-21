@@ -27,6 +27,6 @@ namespace JustDo.Party.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual AppUser User { get; set; }
+        public virtual UserData User { get; set; }
     }
 }

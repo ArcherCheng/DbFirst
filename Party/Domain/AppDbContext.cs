@@ -24,15 +24,16 @@ namespace JustDo.Party.Domain
         public virtual DbSet<AppUser> AppUser { get; set; }
         public virtual DbSet<KeyCode> KeyCode { get; set; }
         public virtual DbSet<KeySystem> KeySystem { get; set; }
+        public virtual DbSet<PartyChat> PartyChat { get; set; }
         public virtual DbSet<PartyData> PartyData { get; set; }
-        public virtual DbSet<PartyMsg> PartyMsg { get; set; }
         public virtual DbSet<PartyPhoto> PartyPhoto { get; set; }
         public virtual DbSet<PartySample> PartySample { get; set; }
+        public virtual DbSet<PartySuggest> PartySuggest { get; set; }
         public virtual DbSet<PartyUser> PartyUser { get; set; }
-        public virtual DbSet<PartyUserMsg> PartyUserMsg { get; set; }
         public virtual DbSet<PartyVote> PartyVote { get; set; }
+        public virtual DbSet<UserChat> UserChat { get; set; }
         public virtual DbSet<UserCondition> UserCondition { get; set; }
-        public virtual DbSet<UserMsg> UserMsg { get; set; }
+        public virtual DbSet<UserData> UserData { get; set; }
         public virtual DbSet<UserPhoto> UserPhoto { get; set; }
         public virtual DbSet<ViewPartyMatchUser> ViewPartyMatchUser { get; set; }
         public virtual DbSet<ViewPartyMatches> ViewPartyMatches { get; set; }
@@ -40,15 +41,6 @@ namespace JustDo.Party.Domain
         public virtual DbSet<ViewPartySumBoy> ViewPartySumBoy { get; set; }
         public virtual DbSet<ViewPartySumGirl> ViewPartySumGirl { get; set; }
         public virtual DbSet<ViewPartySummary> ViewPartySummary { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("server=(local)\\SqlExpress;database=party2021;Trusted_Connection=True;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -85,7 +77,7 @@ namespace JustDo.Party.Domain
             modelBuilder.Entity<AppPermission>(entity =>
             {
                 entity.HasKey(e => e.PermissionId)
-                    .HasName("AppPermission_Key");
+                    .HasName("AppPermission_PKey");
 
                 entity.HasIndex(e => new { e.ControllerName, e.ActionName })
                     .HasName("AppPermission_Index1")
@@ -129,7 +121,7 @@ namespace JustDo.Party.Domain
             modelBuilder.Entity<AppRole>(entity =>
             {
                 entity.HasKey(e => e.RoleId)
-                    .HasName("AppRole_Key");
+                    .HasName("AppRole_PKey");
 
                 entity.HasIndex(e => e.RoleName)
                     .HasName("AppRole_Index1")
@@ -207,7 +199,7 @@ namespace JustDo.Party.Domain
             modelBuilder.Entity<AppUser>(entity =>
             {
                 entity.HasKey(e => e.UserId)
-                    .HasName("AppUser_Key");
+                    .HasName("AppUser_PKey");
 
                 entity.HasIndex(e => e.Email)
                     .HasName("AppUser_Index1")
@@ -217,49 +209,17 @@ namespace JustDo.Party.Domain
                     .HasName("AppUser_Index2")
                     .IsUnique();
 
-                entity.Property(e => e.BankName).HasMaxLength(50);
-
-                entity.Property(e => e.BankNumber6).HasMaxLength(50);
-
-                entity.Property(e => e.Blood).HasMaxLength(2);
-
-                entity.Property(e => e.City).HasMaxLength(50);
-
-                entity.Property(e => e.Country).HasMaxLength(50);
-
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.EmailCode).HasMaxLength(250);
-
-                entity.Property(e => e.FirstName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.IdPhoto11Url).HasMaxLength(250);
-
-                entity.Property(e => e.IdPhoto12Url).HasMaxLength(250);
-
-                entity.Property(e => e.Introduction).HasMaxLength(2000);
-
-                entity.Property(e => e.IsOffUser).HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.JobPhotoUrl).HasMaxLength(250);
-
-                entity.Property(e => e.JobType).HasMaxLength(50);
-
-                entity.Property(e => e.LastName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.LikeCondition).HasMaxLength(2000);
+                entity.Property(e => e.IsOffUser).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.LoginDate).HasColumnType("datetime");
 
                 entity.Property(e => e.LoginLastDate).HasColumnType("datetime");
 
-                entity.Property(e => e.MainPhotoUrl).HasMaxLength(250);
+                entity.Property(e => e.MainPhoto).HasMaxLength(250);
 
                 entity.Property(e => e.PasswordHash).HasMaxLength(2000);
 
@@ -269,23 +229,7 @@ namespace JustDo.Party.Domain
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.PhoneCode).HasMaxLength(50);
-
-                entity.Property(e => e.Religion).HasMaxLength(50);
-
-                entity.Property(e => e.School).HasMaxLength(50);
-
-                entity.Property(e => e.SchoolUrl).HasMaxLength(250);
-
-                entity.Property(e => e.Star).HasMaxLength(50);
-
-                entity.Property(e => e.Subjects).HasMaxLength(50);
-
                 entity.Property(e => e.UserData).HasMaxLength(100);
-
-                entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasMaxLength(50);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -358,10 +302,51 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<PartyChat>(entity =>
+            {
+                entity.HasIndex(e => new { e.PartyId, e.RecipientId })
+                    .HasName("PartyChat_index2");
+
+                entity.HasIndex(e => new { e.PartyId, e.SenderId })
+                    .HasName("PartyChat_index1");
+
+                entity.Property(e => e.Contents)
+                    .IsRequired()
+                    .HasMaxLength(2000);
+
+                entity.Property(e => e.ReadDate).HasColumnType("datetime");
+
+                entity.Property(e => e.SendDate).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteIp).HasMaxLength(32);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(32);
+
+                entity.HasOne(d => d.Party)
+                    .WithMany(p => p.PartyChat)
+                    .HasForeignKey(d => d.PartyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PartyChat_PartyData");
+
+                entity.HasOne(d => d.Recipient)
+                    .WithMany(p => p.PartyChatRecipient)
+                    .HasForeignKey(d => d.RecipientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PartyChat_Recipient");
+
+                entity.HasOne(d => d.Sender)
+                    .WithMany(p => p.PartyChatSender)
+                    .HasForeignKey(d => d.SenderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PartyChat_Sender");
+            });
+
             modelBuilder.Entity<PartyData>(entity =>
             {
                 entity.HasKey(e => e.PartyId)
-                    .HasName("PartyData_Key");
+                    .HasName("PartyData_PKey");
 
                 entity.HasIndex(e => e.PartyDate)
                     .HasName("PartyData_index1");
@@ -399,25 +384,6 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(32);
             });
 
-            modelBuilder.Entity<PartyMsg>(entity =>
-            {
-                entity.HasIndex(e => new { e.PartyId, e.UserId })
-                    .HasName("PartyMsg_index1");
-
-                entity.Property(e => e.Contents)
-                    .IsRequired()
-                    .HasColumnName("contents")
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.UserId).HasColumnName("userId");
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
-            });
-
             modelBuilder.Entity<PartyPhoto>(entity =>
             {
                 entity.HasIndex(e => new { e.PartyId, e.Id })
@@ -439,13 +405,13 @@ namespace JustDo.Party.Domain
                     .WithMany(p => p.PartyPhoto)
                     .HasForeignKey(d => d.PartyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Photo_Party");
+                    .HasConstraintName("PartyPhoto_PartyData");
             });
 
             modelBuilder.Entity<PartySample>(entity =>
             {
                 entity.HasKey(e => e.PartyName)
-                    .HasName("PartySample_Key");
+                    .HasName("PartySample_PKey");
 
                 entity.Property(e => e.PartyName).HasMaxLength(128);
 
@@ -456,6 +422,8 @@ namespace JustDo.Party.Domain
                     .HasMaxLength(8);
 
                 entity.Property(e => e.BusNote).HasMaxLength(250);
+
+                entity.Property(e => e.EarlyDate).HasColumnType("date");
 
                 entity.Property(e => e.EndTime)
                     .IsRequired()
@@ -474,6 +442,36 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.WriteUser).HasMaxLength(32);
             });
 
+            modelBuilder.Entity<PartySuggest>(entity =>
+            {
+                entity.HasIndex(e => new { e.PartyId, e.UserId })
+                    .HasName("PartySuggest_index1");
+
+                entity.Property(e => e.Suggestion)
+                    .IsRequired()
+                    .HasMaxLength(2000);
+
+                entity.Property(e => e.UserId).HasColumnName("userId");
+
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(50);
+
+                entity.HasOne(d => d.Party)
+                    .WithMany(p => p.PartySuggest)
+                    .HasForeignKey(d => d.PartyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PartySuggest_PartyData");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.PartySuggest)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("PartySuggest_UserData");
+            });
+
             modelBuilder.Entity<PartyUser>(entity =>
             {
                 entity.HasIndex(e => new { e.PartyId, e.UserId })
@@ -486,17 +484,17 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.ApplyDate).HasColumnType("datetime");
 
-                entity.Property(e => e.BankDate).HasMaxLength(32);
+                entity.Property(e => e.BankDate).HasMaxLength(50);
 
-                entity.Property(e => e.BankName).HasMaxLength(32);
+                entity.Property(e => e.BankName).HasMaxLength(50);
 
-                entity.Property(e => e.BankNumber6).HasMaxLength(32);
+                entity.Property(e => e.BankNumber6).HasMaxLength(50);
 
-                entity.Property(e => e.FriendsName).HasMaxLength(32);
+                entity.Property(e => e.FriendsName).HasMaxLength(50);
 
                 entity.Property(e => e.Notes).HasMaxLength(128);
 
-                entity.Property(e => e.RetrunNote).HasMaxLength(64);
+                entity.Property(e => e.ReturnNote).HasMaxLength(64);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(32);
 
@@ -514,48 +512,13 @@ namespace JustDo.Party.Domain
                     .WithMany(p => p.PartyUser)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PartyUser_AppUser");
-            });
-
-            modelBuilder.Entity<PartyUserMsg>(entity =>
-            {
-                entity.HasIndex(e => new { e.RecipientId, e.SenderId })
-                    .HasName("PartyUserMsg_index2");
-
-                entity.HasIndex(e => new { e.SenderId, e.RecipientId })
-                    .HasName("PartyUserMsg_index1");
-
-                entity.Property(e => e.Contents)
-                    .IsRequired()
-                    .HasMaxLength(2000);
-
-                entity.Property(e => e.ReadDate).HasColumnType("datetime");
-
-                entity.Property(e => e.SendDate).HasColumnType("datetime");
-
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(32);
-
-                entity.HasOne(d => d.Recipient)
-                    .WithMany(p => p.PartyUserMsgRecipient)
-                    .HasForeignKey(d => d.RecipientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PartyUserMsg_Recipient");
-
-                entity.HasOne(d => d.Sender)
-                    .WithMany(p => p.PartyUserMsgSender)
-                    .HasForeignKey(d => d.SenderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("PartyUserMsg_Sender");
+                    .HasConstraintName("PartyUser_UserData");
             });
 
             modelBuilder.Entity<PartyVote>(entity =>
             {
                 entity.HasKey(e => new { e.PartyId, e.VoteId, e.LikerId })
-                    .HasName("PartyVote_Key");
+                    .HasName("PartyVote_PKey");
 
                 entity.Property(e => e.VoteDate).HasColumnType("datetime");
 
@@ -582,6 +545,41 @@ namespace JustDo.Party.Domain
                     .HasForeignKey(d => d.VoteId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("PartyVote_VoteId");
+            });
+
+            modelBuilder.Entity<UserChat>(entity =>
+            {
+                entity.HasIndex(e => new { e.RecipientId, e.SenderId })
+                    .HasName("UserChat_index2");
+
+                entity.HasIndex(e => new { e.SenderId, e.RecipientId })
+                    .HasName("UserChat_index1");
+
+                entity.Property(e => e.Contents)
+                    .IsRequired()
+                    .HasMaxLength(2000);
+
+                entity.Property(e => e.ReadDate).HasColumnType("datetime");
+
+                entity.Property(e => e.SendDate).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteIp).HasMaxLength(32);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(32);
+
+                entity.HasOne(d => d.Recipient)
+                    .WithMany(p => p.UserChatRecipient)
+                    .HasForeignKey(d => d.RecipientId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserChat_Recipient");
+
+                entity.HasOne(d => d.Sender)
+                    .WithMany(p => p.UserChatSender)
+                    .HasForeignKey(d => d.SenderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("UserChat_Sender");
             });
 
             modelBuilder.Entity<UserCondition>(entity =>
@@ -611,42 +609,77 @@ namespace JustDo.Party.Domain
                     .WithOne(p => p.UserCondition)
                     .HasForeignKey<UserCondition>(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserCondition_AppUser");
+                    .HasConstraintName("UserCondition_UserData");
             });
 
-            modelBuilder.Entity<UserMsg>(entity =>
+            modelBuilder.Entity<UserData>(entity =>
             {
-                entity.HasIndex(e => new { e.RecipientId, e.SenderId })
-                    .HasName("UserMsg_index2");
+                entity.HasKey(e => e.UserId)
+                    .HasName("UserData_PKey");
 
-                entity.HasIndex(e => new { e.SenderId, e.RecipientId })
-                    .HasName("UserMsg_index1");
+                entity.Property(e => e.UserId).ValueGeneratedNever();
 
-                entity.Property(e => e.Contents)
+                entity.Property(e => e.BankName).HasMaxLength(50);
+
+                entity.Property(e => e.BankNumber6).HasMaxLength(50);
+
+                entity.Property(e => e.Blood).HasMaxLength(2);
+
+                entity.Property(e => e.City).HasMaxLength(50);
+
+                entity.Property(e => e.Country).HasMaxLength(50);
+
+                entity.Property(e => e.EmailCode).HasMaxLength(250);
+
+                entity.Property(e => e.FirstName)
                     .IsRequired()
-                    .HasMaxLength(2000);
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.ReadDate).HasColumnType("datetime");
+                entity.Property(e => e.IdPhoto11Url).HasMaxLength(250);
 
-                entity.Property(e => e.SendDate).HasColumnType("datetime");
+                entity.Property(e => e.IdPhoto12Url).HasMaxLength(250);
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.Introduction).HasMaxLength(2000);
 
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+                entity.Property(e => e.JobPhotoUrl).HasMaxLength(250);
 
-                entity.Property(e => e.WriteUser).HasMaxLength(32);
+                entity.Property(e => e.JobType).HasMaxLength(50);
 
-                entity.HasOne(d => d.Recipient)
-                    .WithMany(p => p.UserMsgRecipient)
-                    .HasForeignKey(d => d.RecipientId)
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.LikeCondition).HasMaxLength(2000);
+
+                entity.Property(e => e.NickName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PhoneCode).HasMaxLength(50);
+
+                entity.Property(e => e.Religion).HasMaxLength(50);
+
+                entity.Property(e => e.School).HasMaxLength(50);
+
+                entity.Property(e => e.SchoolUrl).HasMaxLength(250);
+
+                entity.Property(e => e.Star).HasMaxLength(50);
+
+                entity.Property(e => e.Subjects).HasMaxLength(50);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.WriteUser).HasMaxLength(50);
+
+                entity.HasOne(d => d.User)
+                    .WithOne(p => p.UserDataNavigation)
+                    .HasForeignKey<UserData>(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserMsg_Recipient");
-
-                entity.HasOne(d => d.Sender)
-                    .WithMany(p => p.UserMsgSender)
-                    .HasForeignKey(d => d.SenderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserMsg_Sender");
+                    .HasConstraintName("UserData_AppUser");
             });
 
             modelBuilder.Entity<UserPhoto>(entity =>
@@ -667,7 +700,7 @@ namespace JustDo.Party.Domain
                     .WithMany(p => p.UserPhoto)
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("UserPhoto_AppUser");
+                    .HasConstraintName("UserPhoto_UserData");
             });
 
             modelBuilder.Entity<ViewPartyMatchUser>(entity =>

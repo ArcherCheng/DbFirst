@@ -17,6 +17,6 @@ namespace JustDo.Party.Domain
         public int? TotalGirls { get; set; }
         public int? GirlAges { get; set; }
         public int? TotalVotes { get; set; }
-        public int? TotalMatchs { get; set; }
+        public int? TotalMatches { get; set; }
     }
 }

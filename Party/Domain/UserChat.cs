@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace JustDo.Party.Domain
 {
-    public partial class PartyUserMsg
+    public partial class UserChat
     {
         public int Id { get; set; }
-        public int PartyId { get; set; }
         public int SenderId { get; set; }
         public int RecipientId { get; set; }
         public string Contents { get; set; }
@@ -20,7 +19,7 @@ namespace JustDo.Party.Domain
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
-        public virtual AppUser Recipient { get; set; }
-        public virtual AppUser Sender { get; set; }
+        public virtual UserData Recipient { get; set; }
+        public virtual UserData Sender { get; set; }
     }
 }

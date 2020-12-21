@@ -6,7 +6,7 @@ namespace JustDo.Party.Domain
     public partial class ViewPartyMatches
     {
         public int Partyid { get; set; }
-        public int? TotalMatchs { get; set; }
+        public int? TotalMatches { get; set; }
         public int? TotalVotes { get; set; }
     }
 }

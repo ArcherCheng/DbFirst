@@ -17,7 +17,7 @@ namespace JustDo.Party.Domain
         public string FriendsName { get; set; }
         public int PartyNo { get; set; }
         public int CheckOver { get; set; }
-        public string RetrunNote { get; set; }
+        public string ReturnNote { get; set; }
         public string Notes { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
@@ -25,6 +25,6 @@ namespace JustDo.Party.Domain
         public string WriteIp { get; set; }
 
         public virtual PartyData Party { get; set; }
-        public virtual AppUser User { get; set; }
+        public virtual UserData User { get; set; }
     }
 }
