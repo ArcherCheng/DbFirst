@@ -41,6 +41,16 @@ namespace JustDo.Party.Domain
         public virtual DbSet<ViewPartySumBoy> ViewPartySumBoy { get; set; }
         public virtual DbSet<ViewPartySumGirl> ViewPartySumGirl { get; set; }
         public virtual DbSet<ViewPartySummary> ViewPartySummary { get; set; }
+        public virtual DbSet<ViewPartyVoteCount> ViewPartyVoteCount { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("server=(local)\\SqlExpress;database=party2021;Trusted_Connection=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -767,10 +777,22 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.Restaurant).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<ViewPartyVoteCount>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewPartyVoteCount");
+
+                entity.Property(e => e.Likerid).HasColumnName("likerid");
+
+                entity.Property(e => e.PartyId).HasColumnName("partyId");
+
+                entity.Property(e => e.Sex).HasColumnName("sex");
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-
 }
