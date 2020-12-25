@@ -56,6 +56,11 @@ namespace JustDo.Party.Domain
         public DateTime? WriteTime { get; set; }
         public string WriteUser { get; set; }
         public string WriteIp { get; set; }
+        public string MainPhotoUrl { get; set; }
+        public string Personality { get; set; }
+        public string Technique { get; set; }
+        public string Interest { get; set; }
+        public string Activities { get; set; }
 
         public virtual AppUser User { get; set; }
         public virtual UserCondition UserCondition { get; set; }

@@ -414,10 +414,9 @@ namespace JustDo.Party.Domain
 
             modelBuilder.Entity<PartySample>(entity =>
             {
-                entity.HasKey(e => e.PartyName)
-                    .HasName("PartySample_PKey");
-
-                entity.Property(e => e.PartyName).HasMaxLength(128);
+                entity.HasIndex(e => e.PartyName)
+                    .HasName("PartySample_Index1")
+                    .IsUnique();
 
                 entity.Property(e => e.AddressNo).HasMaxLength(120);
 
@@ -434,6 +433,10 @@ namespace JustDo.Party.Domain
                     .HasMaxLength(8);
 
                 entity.Property(e => e.Notes).HasMaxLength(250);
+
+                entity.Property(e => e.PartyName)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.PictureUrl).HasMaxLength(128);
 
@@ -521,8 +524,9 @@ namespace JustDo.Party.Domain
 
             modelBuilder.Entity<PartyVote>(entity =>
             {
-                entity.HasKey(e => new { e.PartyId, e.VoteId, e.LikerId })
-                    .HasName("PartyVote_PKey");
+                entity.HasIndex(e => new { e.PartyId, e.VoteId, e.LikerId })
+                    .HasName("PartyVote_index1")
+                    .IsUnique();
 
                 entity.Property(e => e.VoteDate).HasColumnType("datetime");
 
@@ -623,6 +627,8 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.UserId).ValueGeneratedNever();
 
+                entity.Property(e => e.Activities).HasMaxLength(50);
+
                 entity.Property(e => e.BankName).HasMaxLength(50);
 
                 entity.Property(e => e.BankNumber6).HasMaxLength(50);
@@ -641,6 +647,8 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.IdPhoto12Url).HasMaxLength(250);
 
+                entity.Property(e => e.Interest).HasMaxLength(50);
+
                 entity.Property(e => e.Introduction).HasMaxLength(2000);
 
                 entity.Property(e => e.JobPhotoUrl).HasMaxLength(250);
@@ -653,9 +661,13 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.LikeCondition).HasMaxLength(2000);
 
+                entity.Property(e => e.MainPhotoUrl).HasMaxLength(250);
+
                 entity.Property(e => e.NickName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.Personality).HasMaxLength(50);
 
                 entity.Property(e => e.Religion).HasMaxLength(50);
 
@@ -666,6 +678,8 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.Star).HasMaxLength(50);
 
                 entity.Property(e => e.Subjects).HasMaxLength(50);
+
+                entity.Property(e => e.Technique).HasMaxLength(50);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 

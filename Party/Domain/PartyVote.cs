@@ -5,6 +5,7 @@ namespace JustDo.Party.Domain
 {
     public partial class PartyVote
     {
+        public int Id { get; set; }
         public int PartyId { get; set; }
         public int VoteId { get; set; }
         public int LikerId { get; set; }

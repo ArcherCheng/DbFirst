@@ -5,6 +5,7 @@ namespace JustDo.Party.Domain
 {
     public partial class PartySample
     {
+        public int Id { get; set; }
         public string PartyName { get; set; }
         public string BeginTime { get; set; }
         public string EndTime { get; set; }
