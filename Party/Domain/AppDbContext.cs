@@ -371,7 +371,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.Notes).HasMaxLength(250);
 
-                entity.Property(e => e.PartyDate).HasColumnType("date");
+                entity.Property(e => e.PartyDate).HasColumnType("datetime");
 
                 entity.Property(e => e.PartyName)
                     .IsRequired()
@@ -758,7 +758,7 @@ namespace JustDo.Party.Domain
 
                 entity.ToView("ViewPartySummary");
 
-                entity.Property(e => e.PartyDate).HasColumnType("date");
+                entity.Property(e => e.PartyDate).HasColumnType("datetime");
 
                 entity.Property(e => e.PartyName)
                     .IsRequired()
@@ -772,4 +772,5 @@ namespace JustDo.Party.Domain
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
+
 }
