@@ -5,6 +5,7 @@ namespace FoodPos.Domain
 {
     public partial class ViewInvoiceSumByYear
     {
+        public int? WriteComId { get; set; }
         public string GroupUnit { get; set; }
         public int? InvoiceCounts { get; set; }
         public int? TotalOrderAmt { get; set; }

@@ -28,9 +28,10 @@ namespace FoodPos.Domain
         public bool IsDelete { get; set; }
         public string StoreName { get; set; }
         public string DutyNo { get; set; }
+        public int? WriteComId { get; set; }
+        public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
-        public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
         public virtual Invoice Invoice { get; set; }

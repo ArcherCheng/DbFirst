@@ -14,20 +14,24 @@ namespace FoodPos.Domain
         public string UserName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public DateTime? Birthday { get; set; }
+        public string Birthday { get; set; }
         public string MainPhoto { get; set; }
+        public int? ComId { get; set; }
+        public string UserRole { get; set; }
         public string UserData { get; set; }
-        public bool? IsOnOff { get; set; }
+        public bool? IsOffUser { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public DateTime? LoginDate { get; set; }
         public int? LoginErrors { get; set; }
         public DateTime? LoginLastDate { get; set; }
+        public int? WriteComId { get; set; }
+        public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
-        public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
+        public virtual AppComData Com { get; set; }
         public virtual ICollection<AppRoleUser> AppRoleUser { get; set; }
     }
 }

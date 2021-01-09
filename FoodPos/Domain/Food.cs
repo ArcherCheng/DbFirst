@@ -18,6 +18,7 @@ namespace FoodPos.Domain
         public int SortNo { get; set; }
         public int CostPrice { get; set; }
         public int SalePrice { get; set; }
+        public int SalePrice2 { get; set; }
         public int OffPrice { get; set; }
         public int PrepareMinutes { get; set; }
         public int CookMinutes { get; set; }
@@ -27,9 +28,10 @@ namespace FoodPos.Domain
         public string PicturePath { get; set; }
         public string PictureFile { get; set; }
         public string Notes { get; set; }
+        public int? WriteComId { get; set; }
+        public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
-        public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
         public virtual ICollection<FoodOff> FoodOff { get; set; }

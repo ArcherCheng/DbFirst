@@ -9,9 +9,10 @@ namespace FoodPos.Domain
         public int RoleId { get; set; }
         public int UserId { get; set; }
         public bool IsPermit { get; set; }
+        public int? WriteComId { get; set; }
+        public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
-        public string WriteUser { get; set; }
         public string WriteIp { get; set; }
 
         public virtual AppRole Role { get; set; }

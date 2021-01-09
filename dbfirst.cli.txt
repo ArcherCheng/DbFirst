@@ -51,6 +51,9 @@ dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=hr4nice2010;Tru
 3.4 party2021
 dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=party2021;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o Party/Domain -f 
 
+3.5 FoodPos2021
+dotnet ef dbContext scaffold "server=(local)\SqlExpress;database=FoodPos2021;Trusted_Connection=True;" Microsoft.EntityFrameWorkCore.SqlServer -c "AppDbContext" -o FoodPos2021/Domain -f 
+
 
 
 4. 安裝 controller Scaffolding tool

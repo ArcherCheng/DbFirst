@@ -15,6 +15,7 @@ namespace FoodPos.Domain
         {
         }
 
+        public virtual DbSet<AppComData> AppComData { get; set; }
         public virtual DbSet<AppLogRequest> AppLogRequest { get; set; }
         public virtual DbSet<AppLogTable> AppLogTable { get; set; }
         public virtual DbSet<AppPermission> AppPermission { get; set; }
@@ -83,25 +84,81 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewQuestionnaireAnswerCountByMonth> ViewQuestionnaireAnswerCountByMonth { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerMonth> ViewQuestionnaireAnswerMonth { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("server=(local)\\SqlExpress;database=FoodPos2021;Trusted_Connection=True;");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AppLogRequest>(entity =>
+            modelBuilder.Entity<AppComData>(entity =>
             {
-                entity.Property(e => e.Destination).HasMaxLength(250);
+                entity.HasKey(e => e.ComId)
+                    .HasName("AppComData_Key");
 
-                entity.Property(e => e.Method).HasMaxLength(250);
+                entity.Property(e => e.ComFax).HasMaxLength(50);
 
-                entity.Property(e => e.QueryString).HasMaxLength(250);
+                entity.Property(e => e.ComIp).HasMaxLength(50);
 
-                entity.Property(e => e.Refer).HasMaxLength(250);
+                entity.Property(e => e.ComMaster).HasMaxLength(50);
+
+                entity.Property(e => e.ComMobile).HasMaxLength(50);
+
+                entity.Property(e => e.ComName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ComNo)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ComPresident)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.ComStaff).HasMaxLength(50);
+
+                entity.Property(e => e.ComTel).HasMaxLength(50);
+
+                entity.Property(e => e.GroupName).HasMaxLength(50);
+
+                entity.Property(e => e.InvoiceBigMonth)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.InvoiceCode)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.InvoiceTitle)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.InvoiceYm)
+                    .IsRequired()
+                    .HasColumnName("InvoiceYM")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+            });
 
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+            modelBuilder.Entity<AppLogRequest>(entity =>
+            {
+                entity.Property(e => e.Destination).HasMaxLength(500);
+
+                entity.Property(e => e.Method).HasMaxLength(500);
+
+                entity.Property(e => e.QueryString).HasMaxLength(500);
+
+                entity.Property(e => e.Refer).HasMaxLength(500);
             });
 
             modelBuilder.Entity<AppLogTable>(entity =>
@@ -152,11 +209,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<AppRole>(entity =>
@@ -176,11 +229,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<AppRolePermission>(entity =>
@@ -191,11 +240,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Permission)
                     .WithMany(p => p.AppRolePermission)
@@ -218,11 +263,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AppRoleUser)
@@ -250,13 +291,13 @@ namespace FoodPos.Domain
                     .HasName("AppUser_Index2")
                     .IsUnique();
 
-                entity.Property(e => e.Birthday).HasColumnType("date");
+                entity.Property(e => e.Birthday).HasMaxLength(50);
 
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.IsOnOff).HasDefaultValueSql("((1))");
+                entity.Property(e => e.IsOffUser).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.LoginDate).HasColumnType("datetime");
 
@@ -278,13 +319,16 @@ namespace FoodPos.Domain
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.UserRole).HasMaxLength(50);
+
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.HasOne(d => d.Com)
+                    .WithMany(p => p.AppUser)
+                    .HasForeignKey(d => d.ComId)
+                    .HasConstraintName("AppUser_AppComData");
             });
 
             modelBuilder.Entity<CheckoutAddon>(entity =>
@@ -292,7 +336,7 @@ namespace FoodPos.Domain
                 entity.HasKey(e => e.AddonId)
                     .HasName("CheckoutAddon_Key");
 
-                entity.HasIndex(e => e.AddonName)
+                entity.HasIndex(e => new { e.WriteComId, e.AddonName })
                     .HasName("CheckoutAddon_Index1")
                     .IsUnique();
 
@@ -302,21 +346,19 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.HasIndex(e => e.CustomerName)
+                entity.HasIndex(e => new { e.WriteComId, e.CustomerName })
                     .HasName("Customer_Index1")
                     .IsUnique();
 
-                entity.HasIndex(e => e.MobileNo)
-                    .HasName("Customer_Index2");
+                entity.HasIndex(e => new { e.WriteComId, e.MobileNo })
+                    .HasName("Customer_Index2")
+                    .IsUnique()
+                    .HasFilter("([MobileNo] IS NOT NULL)");
 
                 entity.Property(e => e.Address).HasMaxLength(50);
 
@@ -340,16 +382,12 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Food>(entity =>
             {
-                entity.HasIndex(e => e.FoodName)
+                entity.HasIndex(e => new { e.WriteComId, e.FoodName })
                     .HasName("Food_Index1")
                     .IsUnique();
 
@@ -371,11 +409,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<FoodOff>(entity =>
@@ -388,11 +422,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Food)
                     .WithMany(p => p.FoodOff)
@@ -406,7 +436,7 @@ namespace FoodPos.Domain
                 entity.HasKey(e => e.AddonId)
                     .HasName("FoodTypeAddon_Key");
 
-                entity.HasIndex(e => new { e.AddonType, e.AddonName })
+                entity.HasIndex(e => new { e.WriteComId, e.AddonType, e.AddonName })
                     .HasName("FoodTypeAddon_Index1")
                     .IsUnique();
 
@@ -420,11 +450,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Invoice>(entity =>
@@ -453,11 +479,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Invoice)
@@ -474,11 +496,7 @@ namespace FoodPos.Domain
             {
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Addon)
                     .WithMany(p => p.InvoiceAddon)
@@ -495,7 +513,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<KeyCode>(entity =>
             {
-                entity.HasIndex(e => new { e.CodeGroup, e.CodeValue })
+                entity.HasIndex(e => new { e.WriteComId, e.CodeGroup, e.CodeValue })
                     .HasName("KeyCode_Index1")
                     .IsUnique();
 
@@ -515,16 +533,12 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<KeySystem>(entity =>
             {
-                entity.HasIndex(e => e.SystemKey)
+                entity.HasIndex(e => new { e.WriteComId, e.SystemKey })
                     .HasName("KeySystem_Index1")
                     .IsUnique();
 
@@ -548,11 +562,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
@@ -564,11 +574,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Food)
                     .WithMany(p => p.OrderDetail)
@@ -587,11 +593,7 @@ namespace FoodPos.Domain
             {
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Addon)
                     .WithMany(p => p.OrderDetailAddon)
@@ -627,11 +629,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Invoice)
                     .WithMany(p => p.OrderMaster)
@@ -641,7 +639,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<Promotion>(entity =>
             {
-                entity.HasIndex(e => e.PromotionName)
+                entity.HasIndex(e => new { e.WriteComId, e.PromotionName })
                     .HasName("Promotion_Index1")
                     .IsUnique();
 
@@ -657,16 +655,12 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Question>(entity =>
             {
-                entity.HasIndex(e => e.QuestionDesc)
+                entity.HasIndex(e => new { e.WriteComId, e.QuestionDesc })
                     .HasName("Question_Index1")
                     .IsUnique();
 
@@ -678,11 +672,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<QuestionAnswer>(entity =>
@@ -690,17 +680,17 @@ namespace FoodPos.Domain
                 entity.HasKey(e => e.AnswerId)
                     .HasName("QuestionAnswer_Key");
 
+                entity.HasIndex(e => new { e.WriteComId, e.AnswerDesc })
+                    .HasName("QuestionAnswer_Index1")
+                    .IsUnique();
+
                 entity.Property(e => e.AnswerDesc)
                     .IsRequired()
                     .HasMaxLength(50);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Question)
                     .WithMany(p => p.QuestionAnswer)
@@ -711,6 +701,16 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<QuestionDiscount>(entity =>
             {
+                entity.HasIndex(e => new { e.WriteComId, e.MaxAmount })
+                    .HasName("QuestionDiscount_Index2")
+                    .IsUnique()
+                    .HasFilter("([IsOnOff]=(1))");
+
+                entity.HasIndex(e => new { e.WriteComId, e.MinAmount })
+                    .HasName("QuestionDiscount_Index1")
+                    .IsUnique()
+                    .HasFilter("([IsOnOff]=(1))");
+
                 entity.Property(e => e.DiscountType)
                     .IsRequired()
                     .HasMaxLength(1);
@@ -719,20 +719,16 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Questionnaire>(entity =>
             {
                 entity.HasIndex(e => e.CustomerId)
-                    .HasName("Questionnaire_Index2");
+                    .HasName("Questionnaire_Index3");
 
                 entity.HasIndex(e => e.DiscountGuid)
-                    .HasName("Questionnaire_Index3")
+                    .HasName("Questionnaire_Index2")
                     .IsUnique()
                     .HasFilter("([DiscountGuid] IS NOT NULL)");
 
@@ -751,15 +747,11 @@ namespace FoodPos.Domain
                     .IsRequired()
                     .HasMaxLength(1);
 
-                entity.Property(e => e.Suggestion).HasMaxLength(250);
+                entity.Property(e => e.Suggestion).HasMaxLength(500);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Questionnaire)
@@ -779,13 +771,12 @@ namespace FoodPos.Domain
                     .HasName("QuestionnaireAnswer_Index1")
                     .IsUnique();
 
+                entity.HasIndex(e => new { e.WriteComId, e.QuestionId })
+                    .HasName("QuestionnaireAnswer_Index2");
+
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
-                entity.Property(e => e.WriteTime)
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.WriteUser).HasMaxLength(50);
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Answer)
                     .WithMany(p => p.QuestionnaireAnswer)
@@ -854,8 +845,6 @@ namespace FoodPos.Domain
                 entity.HasNoKey();
 
                 entity.ToView("ViewCustomerOrderSumAll");
-
-                entity.Property(e => e.CustomerId).HasColumnName("customerId");
             });
 
             modelBuilder.Entity<ViewFoodOffMaxOffDate>(entity =>
