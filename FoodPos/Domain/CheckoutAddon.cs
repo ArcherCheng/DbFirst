@@ -13,8 +13,8 @@ namespace FoodPos.Domain
         public int AddonId { get; set; }
         public string AddonName { get; set; }
         public int AddonPrice { get; set; }
-        public bool IsSale { get; set; }
-        public int SortNo { get; set; }
+        public bool IsOnOff { get; set; }
+        public int SortOrder { get; set; }
         public int? WriteComId { get; set; }
         public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }

@@ -15,7 +15,7 @@ namespace FoodPos.Domain
         public string PromotionType { get; set; }
         public int MinOrderAmt { get; set; }
         public int PromotionPrice { get; set; }
-        public bool InUse { get; set; }
+        public bool InOnOff { get; set; }
         public string Notes { get; set; }
         public int? WriteComId { get; set; }
         public int? WriteUserId { get; set; }

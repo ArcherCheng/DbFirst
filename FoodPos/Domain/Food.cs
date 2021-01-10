@@ -15,16 +15,18 @@ namespace FoodPos.Domain
         public string FoodName { get; set; }
         public string FoodType { get; set; }
         public string Unit { get; set; }
-        public int SortNo { get; set; }
-        public int CostPrice { get; set; }
-        public int SalePrice { get; set; }
+        public int SortOrder { get; set; }
+        public int SalePrice1 { get; set; }
+        public int OffPrice1 { get; set; }
         public int SalePrice2 { get; set; }
-        public int OffPrice { get; set; }
+        public int OffPrice2 { get; set; }
+        public int SalePrice3 { get; set; }
+        public int OffPrice3 { get; set; }
         public int PrepareMinutes { get; set; }
         public int CookMinutes { get; set; }
         public int CleanMinutes { get; set; }
         public bool IsMainFood { get; set; }
-        public bool IsSale { get; set; }
+        public bool IsOnOff { get; set; }
         public string PicturePath { get; set; }
         public string PictureFile { get; set; }
         public string Notes { get; set; }

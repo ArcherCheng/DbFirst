@@ -17,7 +17,7 @@ namespace FoodPos.Domain
         public string AreaName { get; set; }
         public string ControllerName { get; set; }
         public string ActionName { get; set; }
-        public int? SortNo { get; set; }
+        public int? SortOrder { get; set; }
         public bool? IsVisible { get; set; }
         public bool? IsExternal { get; set; }
         public string ExternalUrl { get; set; }

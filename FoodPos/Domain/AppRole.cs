@@ -14,7 +14,7 @@ namespace FoodPos.Domain
         public int RoleId { get; set; }
         public string RoleName { get; set; }
         public int? Priority { get; set; }
-        public int? SortNo { get; set; }
+        public int? SortOrder { get; set; }
         public string Note1 { get; set; }
         public int? WriteComId { get; set; }
         public int? WriteUserId { get; set; }

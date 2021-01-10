@@ -19,7 +19,7 @@ namespace FoodPos.Domain
         public int? ComId { get; set; }
         public string UserRole { get; set; }
         public string UserData { get; set; }
-        public bool? IsOffUser { get; set; }
+        public bool? IsOnOff { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public DateTime? LoginDate { get; set; }

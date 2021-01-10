@@ -13,16 +13,16 @@ namespace FoodPos.Domain
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                // string connString = Helper.AppSettingsHelper.Configuration["ConnectionStrings:DefaultConnection"];
-                // optionsBuilder.UseSqlServer(connString);
-                ////顯示SQL語法指令
-                //optionsBuilder.UseLoggerFactory(MyLoggerFactory); 
-            }
-        }
+        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // {
+        //     if (!optionsBuilder.IsConfigured)
+        //     {
+        //         // string connString = Helper.AppSettingsHelper.Configuration["ConnectionStrings:DefaultConnection"];
+        //         // optionsBuilder.UseSqlServer(connString);
+        //         ////顯示SQL語法指令
+        //         //optionsBuilder.UseLoggerFactory(MyLoggerFactory); 
+        //     }
+        // }
 
         public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder =>
         {

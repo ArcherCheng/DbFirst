@@ -3,14 +3,13 @@ using System.Collections.Generic;
 
 namespace FoodPos.Domain
 {
-    public partial class KeyCode
+    public partial class OrderTypes
     {
-        public int Id { get; set; }
-        public string CodeGroup { get; set; }
-        public string CodeValue { get; set; }
-        public string CodeLabel { get; set; }
+        public string OrderType { get; set; }
+        public string TypeColor { get; set; }
+        public byte TypePrice { get; set; }
         public int SortOrder { get; set; }
-        public string Notes { get; set; }
+        public bool IsOnOff { get; set; }
         public int? WriteComId { get; set; }
         public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }

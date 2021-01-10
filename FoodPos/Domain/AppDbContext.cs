@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FoodPos.Domain
 {
-    public partial class AppDbContext : DbContext
+    public partial class AppDbContext : BaseDbContext
     {
         public AppDbContext()
         {
@@ -35,6 +35,7 @@ namespace FoodPos.Domain
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<OrderDetailAddon> OrderDetailAddon { get; set; }
         public virtual DbSet<OrderMaster> OrderMaster { get; set; }
+        public virtual DbSet<OrderTypes> OrderTypes { get; set; }
         public virtual DbSet<Promotion> Promotion { get; set; }
         public virtual DbSet<Question> Question { get; set; }
         public virtual DbSet<QuestionAnswer> QuestionAnswer { get; set; }
@@ -83,15 +84,6 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewQuestionnaireAnswerCountAll> ViewQuestionnaireAnswerCountAll { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerCountByMonth> ViewQuestionnaireAnswerCountByMonth { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerMonth> ViewQuestionnaireAnswerMonth { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("server=(local)\\SqlExpress;database=FoodPos2021;Trusted_Connection=True;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -297,7 +289,7 @@ namespace FoodPos.Domain
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.IsOffUser).HasDefaultValueSql("((1))");
+                entity.Property(e => e.IsOnOff).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.LoginDate).HasColumnType("datetime");
 
@@ -637,6 +629,22 @@ namespace FoodPos.Domain
                     .HasConstraintName("OrderMaster_Invoice");
             });
 
+            modelBuilder.Entity<OrderTypes>(entity =>
+            {
+                entity.HasKey(e => e.OrderType)
+                    .HasName("OrderTypes_Key");
+
+                entity.Property(e => e.OrderType).HasMaxLength(30);
+
+                entity.Property(e => e.TypeColor)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
+
+                entity.Property(e => e.WriteTime).HasColumnType("datetime");
+            });
+ 
             modelBuilder.Entity<Promotion>(entity =>
             {
                 entity.HasIndex(e => new { e.WriteComId, e.PromotionName })
@@ -1317,4 +1325,5 @@ namespace FoodPos.Domain
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
+
 }
