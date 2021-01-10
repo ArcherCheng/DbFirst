@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace FoodPos.Domain
 {
-    public partial class AppDbContext : BaseDbContext
+    public partial class AppDbContext : DbContext
     {
         public AppDbContext()
         {
@@ -631,10 +631,13 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<OrderTypes>(entity =>
             {
-                entity.HasKey(e => e.OrderType)
-                    .HasName("OrderTypes_Key");
+                entity.HasIndex(e => new { e.WriteComId, e.OrderType })
+                    .HasName("OrderTypes_Index1")
+                    .IsUnique();
 
-                entity.Property(e => e.OrderType).HasMaxLength(30);
+                entity.Property(e => e.OrderType)
+                    .IsRequired()
+                    .HasMaxLength(30);
 
                 entity.Property(e => e.TypeColor)
                     .IsRequired()
@@ -644,7 +647,7 @@ namespace FoodPos.Domain
 
                 entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
- 
+
             modelBuilder.Entity<Promotion>(entity =>
             {
                 entity.HasIndex(e => new { e.WriteComId, e.PromotionName })

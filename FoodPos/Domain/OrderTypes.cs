@@ -5,6 +5,7 @@ namespace FoodPos.Domain
 {
     public partial class OrderTypes
     {
+        public int Id { get; set; }
         public string OrderType { get; set; }
         public string TypeColor { get; set; }
         public byte TypePrice { get; set; }
