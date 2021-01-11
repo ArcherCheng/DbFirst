@@ -16,11 +16,6 @@ namespace FoodPos.Domain
         public int? Priority { get; set; }
         public int? SortOrder { get; set; }
         public string Note1 { get; set; }
-        public int? WriteComId { get; set; }
-        public int? WriteUserId { get; set; }
-        public int? WriteType { get; set; }
-        public DateTime? WriteTime { get; set; }
-        public string WriteIp { get; set; }
 
         public virtual ICollection<AppRolePermission> AppRolePermission { get; set; }
         public virtual ICollection<AppRoleUser> AppRoleUser { get; set; }

@@ -5,7 +5,7 @@ namespace FoodPos.Domain
 {
     public partial class ViewOrderDetailFoodSumWeekDay2Y
     {
-        public int? WriteComId { get; set; }
+        public int ComId { get; set; }
         public int? GroupUnit { get; set; }
         public int FoodId { get; set; }
         public string FoodType { get; set; }

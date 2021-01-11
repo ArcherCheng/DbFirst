@@ -5,7 +5,7 @@ namespace FoodPos.Domain
 {
     public partial class ViewKeyCodeGroup
     {
-        public int? WriteComId { get; set; }
+        public int ComId { get; set; }
         public string CodeGroup { get; set; }
     }
 }

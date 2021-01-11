@@ -85,12 +85,25 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewQuestionnaireAnswerCountByMonth> ViewQuestionnaireAnswerCountByMonth { get; set; }
         public virtual DbSet<ViewQuestionnaireAnswerMonth> ViewQuestionnaireAnswerMonth { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("server=(local)\\SqlExpress;database=FoodPosModel;Trusted_Connection=True;");
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AppComData>(entity =>
             {
                 entity.HasKey(e => e.ComId)
                     .HasName("AppComData_Key");
+
+                entity.HasIndex(e => e.ComName)
+                    .HasName("AppComData_Index1")
+                    .IsUnique();
 
                 entity.Property(e => e.ComFax).HasMaxLength(50);
 
@@ -136,10 +149,6 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Notes).HasMaxLength(500);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<AppLogRequest>(entity =>
@@ -198,10 +207,6 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
 
                 entity.Property(e => e.PermissionDesc).HasMaxLength(250);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<AppRole>(entity =>
@@ -218,10 +223,6 @@ namespace FoodPos.Domain
                 entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<AppRolePermission>(entity =>
@@ -229,10 +230,6 @@ namespace FoodPos.Domain
                 entity.HasIndex(e => new { e.RoleId, e.PermissionId })
                     .HasName("AppRolePermission_Index1")
                     .IsUnique();
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Permission)
                     .WithMany(p => p.AppRolePermission)
@@ -252,10 +249,6 @@ namespace FoodPos.Domain
                 entity.HasIndex(e => new { e.RoleId, e.UserId })
                     .HasName("AppRoleUser_Index1")
                     .IsUnique();
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AppRoleUser)
@@ -312,15 +305,6 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
 
                 entity.Property(e => e.UserRole).HasMaxLength(50);
-
-                entity.Property(e => e.WriteIp).HasMaxLength(50);
-
-                entity.Property(e => e.WriteTime).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Com)
-                    .WithMany(p => p.AppUser)
-                    .HasForeignKey(d => d.ComId)
-                    .HasConstraintName("AppUser_AppComData");
             });
 
             modelBuilder.Entity<CheckoutAddon>(entity =>
@@ -328,7 +312,7 @@ namespace FoodPos.Domain
                 entity.HasKey(e => e.AddonId)
                     .HasName("CheckoutAddon_Key");
 
-                entity.HasIndex(e => new { e.WriteComId, e.AddonName })
+                entity.HasIndex(e => new { e.ComId, e.AddonName })
                     .HasName("CheckoutAddon_Index1")
                     .IsUnique();
 
@@ -343,11 +327,11 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.CustomerName })
+                entity.HasIndex(e => new { e.ComId, e.CustomerName })
                     .HasName("Customer_Index1")
                     .IsUnique();
 
-                entity.HasIndex(e => new { e.WriteComId, e.MobileNo })
+                entity.HasIndex(e => new { e.ComId, e.MobileNo })
                     .HasName("Customer_Index2")
                     .IsUnique()
                     .HasFilter("([MobileNo] IS NOT NULL)");
@@ -379,7 +363,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<Food>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.FoodName })
+                entity.HasIndex(e => new { e.ComId, e.FoodName })
                     .HasName("Food_Index1")
                     .IsUnique();
 
@@ -428,7 +412,7 @@ namespace FoodPos.Domain
                 entity.HasKey(e => e.AddonId)
                     .HasName("FoodTypeAddon_Key");
 
-                entity.HasIndex(e => new { e.WriteComId, e.AddonType, e.AddonName })
+                entity.HasIndex(e => new { e.ComId, e.AddonType, e.AddonName })
                     .HasName("FoodTypeAddon_Index1")
                     .IsUnique();
 
@@ -505,7 +489,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<KeyCode>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.CodeGroup, e.CodeValue })
+                entity.HasIndex(e => new { e.ComId, e.CodeGroup, e.CodeValue })
                     .HasName("KeyCode_Index1")
                     .IsUnique();
 
@@ -530,7 +514,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<KeySystem>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.SystemKey })
+                entity.HasIndex(e => new { e.ComId, e.SystemKey })
                     .HasName("KeySystem_Index1")
                     .IsUnique();
 
@@ -631,7 +615,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<OrderTypes>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.OrderType })
+                entity.HasIndex(e => new { e.ComId, e.OrderType })
                     .HasName("OrderTypes_Index1")
                     .IsUnique();
 
@@ -650,7 +634,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<Promotion>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.PromotionName })
+                entity.HasIndex(e => new { e.ComId, e.PromotionName })
                     .HasName("Promotion_Index1")
                     .IsUnique();
 
@@ -671,7 +655,7 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<Question>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.QuestionDesc })
+                entity.HasIndex(e => new { e.ComId, e.QuestionDesc })
                     .HasName("Question_Index1")
                     .IsUnique();
 
@@ -691,7 +675,7 @@ namespace FoodPos.Domain
                 entity.HasKey(e => e.AnswerId)
                     .HasName("QuestionAnswer_Key");
 
-                entity.HasIndex(e => new { e.WriteComId, e.AnswerDesc })
+                entity.HasIndex(e => new { e.ComId, e.AnswerDesc })
                     .HasName("QuestionAnswer_Index1")
                     .IsUnique();
 
@@ -712,12 +696,12 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<QuestionDiscount>(entity =>
             {
-                entity.HasIndex(e => new { e.WriteComId, e.MaxAmount })
+                entity.HasIndex(e => new { e.ComId, e.MaxAmount })
                     .HasName("QuestionDiscount_Index2")
                     .IsUnique()
                     .HasFilter("([IsOnOff]=(1))");
 
-                entity.HasIndex(e => new { e.WriteComId, e.MinAmount })
+                entity.HasIndex(e => new { e.ComId, e.MinAmount })
                     .HasName("QuestionDiscount_Index1")
                     .IsUnique()
                     .HasFilter("([IsOnOff]=(1))");
@@ -778,12 +762,12 @@ namespace FoodPos.Domain
 
             modelBuilder.Entity<QuestionnaireAnswer>(entity =>
             {
+                entity.HasIndex(e => new { e.ComId, e.QuestionId })
+                    .HasName("QuestionnaireAnswer_Index2");
+
                 entity.HasIndex(e => new { e.QuestionnaireId, e.QuestionId })
                     .HasName("QuestionnaireAnswer_Index1")
                     .IsUnique();
-
-                entity.HasIndex(e => new { e.WriteComId, e.QuestionId })
-                    .HasName("QuestionnaireAnswer_Index2");
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -1328,5 +1312,4 @@ namespace FoodPos.Domain
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
-
 }

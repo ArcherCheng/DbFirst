@@ -21,11 +21,6 @@ namespace FoodPos.Domain
         public bool? IsVisible { get; set; }
         public bool? IsExternal { get; set; }
         public string ExternalUrl { get; set; }
-        public int? WriteComId { get; set; }
-        public int? WriteUserId { get; set; }
-        public int? WriteType { get; set; }
-        public DateTime? WriteTime { get; set; }
-        public string WriteIp { get; set; }
 
         public virtual ICollection<AppRolePermission> AppRolePermission { get; set; }
     }

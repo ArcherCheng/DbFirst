@@ -11,7 +11,7 @@ namespace FoodPos.Domain
         public string CodeLabel { get; set; }
         public int SortOrder { get; set; }
         public string Notes { get; set; }
-        public int? WriteComId { get; set; }
+        public int ComId { get; set; }
         public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }

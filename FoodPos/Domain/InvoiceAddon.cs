@@ -9,7 +9,7 @@ namespace FoodPos.Domain
         public int InvoiceId { get; set; }
         public int AddonId { get; set; }
         public int Qty { get; set; }
-        public int? WriteComId { get; set; }
+        public int ComId { get; set; }
         public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }

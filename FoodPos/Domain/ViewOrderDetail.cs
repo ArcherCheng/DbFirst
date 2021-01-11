@@ -5,7 +5,7 @@ namespace FoodPos.Domain
 {
     public partial class ViewOrderDetail
     {
-        public int? WriteComId { get; set; }
+        public int ComId { get; set; }
         public int DetailId { get; set; }
         public int OrderId { get; set; }
         public int FoodId { get; set; }

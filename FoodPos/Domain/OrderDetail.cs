@@ -22,7 +22,7 @@ namespace FoodPos.Domain
         public int CookStep { get; set; }
         public bool IsCookOver { get; set; }
         public string CookUser { get; set; }
-        public int? WriteComId { get; set; }
+        public int ComId { get; set; }
         public int? WriteUserId { get; set; }
         public int? WriteType { get; set; }
         public DateTime? WriteTime { get; set; }

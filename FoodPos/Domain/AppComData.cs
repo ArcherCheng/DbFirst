@@ -5,11 +5,6 @@ namespace FoodPos.Domain
 {
     public partial class AppComData
     {
-        public AppComData()
-        {
-            AppUser = new HashSet<AppUser>();
-        }
-
         public int ComId { get; set; }
         public string ComName { get; set; }
         public string GroupName { get; set; }
@@ -35,12 +30,5 @@ namespace FoodPos.Domain
         public int MaxTableNo { get; set; }
         public int MaxSeatNo { get; set; }
         public string Notes { get; set; }
-        public int? WriteComId { get; set; }
-        public int? WriteUserId { get; set; }
-        public int? WriteType { get; set; }
-        public DateTime? WriteTime { get; set; }
-        public string WriteIp { get; set; }
-
-        public virtual ICollection<AppUser> AppUser { get; set; }
     }
 }

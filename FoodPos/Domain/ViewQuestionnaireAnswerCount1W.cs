@@ -5,7 +5,7 @@ namespace FoodPos.Domain
 {
     public partial class ViewQuestionnaireAnswerCount1W
     {
-        public int? WriteComId { get; set; }
+        public int? ComId { get; set; }
         public int? QuestionId { get; set; }
         public string QuestionDesc { get; set; }
         public int AnswerId { get; set; }

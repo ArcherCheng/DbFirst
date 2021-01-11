@@ -25,13 +25,7 @@ namespace FoodPos.Domain
         public DateTime? LoginDate { get; set; }
         public int? LoginErrors { get; set; }
         public DateTime? LoginLastDate { get; set; }
-        public int? WriteComId { get; set; }
-        public int? WriteUserId { get; set; }
-        public int? WriteType { get; set; }
-        public DateTime? WriteTime { get; set; }
-        public string WriteIp { get; set; }
 
-        public virtual AppComData Com { get; set; }
         public virtual ICollection<AppRoleUser> AppRoleUser { get; set; }
     }
 }
