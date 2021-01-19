@@ -5,11 +5,6 @@ namespace FoodPos.Domain
 {
     public partial class Questionnaire
     {
-        public Questionnaire()
-        {
-            QuestionnaireAnswer = new HashSet<QuestionnaireAnswer>();
-        }
-
         public int QuestionnaireId { get; set; }
         public string DiscountGuid { get; set; }
         public DateTime DiscountDate { get; set; }
@@ -27,6 +22,5 @@ namespace FoodPos.Domain
 
         public virtual Customer Customer { get; set; }
         public virtual Invoice Invoice { get; set; }
-        public virtual ICollection<QuestionnaireAnswer> QuestionnaireAnswer { get; set; }
     }
 }

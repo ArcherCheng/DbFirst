@@ -28,7 +28,6 @@ namespace FoodPos.Domain
         public bool IsMainFood { get; set; }
         public bool IsOnOff { get; set; }
         public string PicturePath { get; set; }
-        public string PictureFile { get; set; }
         public string Notes { get; set; }
         public int ComId { get; set; }
         public int? WriteUserId { get; set; }
