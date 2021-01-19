@@ -26,10 +26,10 @@ namespace FoodPos.Domain
         public int ServiceRate { get; set; }
         public int QuestionnaireDays { get; set; }
         public int DiscountMonths { get; set; }
-        public string PrinterForInvoice { get; set; }
-        public string PrinterForOrder { get; set; }
-        public string PrinterForKetchen { get; set; }
-        public string PrinterForOrther { get; set; }
+        public string InvoicePrinter { get; set; }
+        public string TakeNoPrinter { get; set; }
+        public string LabelPrinter { get; set; }
+        public string OtherPrinter { get; set; }
         public bool NeedTableNo { get; set; }
         public int MaxTableNo { get; set; }
         public int MaxSeatNo { get; set; }

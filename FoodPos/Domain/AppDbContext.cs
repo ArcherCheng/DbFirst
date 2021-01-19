@@ -139,6 +139,8 @@ namespace FoodPos.Domain
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.InvoicePrinter).HasMaxLength(50);
+
                 entity.Property(e => e.InvoiceTitle)
                     .IsRequired()
                     .HasMaxLength(50);
@@ -148,23 +150,13 @@ namespace FoodPos.Domain
                     .HasColumnName("InvoiceYM")
                     .HasMaxLength(50);
 
+                entity.Property(e => e.LabelPrinter).HasMaxLength(50);
+
                 entity.Property(e => e.Notes).HasMaxLength(500);
 
-                entity.Property(e => e.PrinterForInvoice)
-                    .HasColumnName("printerForInvoice")
-                    .HasMaxLength(50);
+                entity.Property(e => e.OtherPrinter).HasMaxLength(50);
 
-                entity.Property(e => e.PrinterForKetchen)
-                    .HasColumnName("printerForKetchen")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.PrinterForOrder)
-                    .HasColumnName("printerForOrder")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.PrinterForOrther)
-                    .HasColumnName("printerForOrther")
-                    .HasMaxLength(50);
+                entity.Property(e => e.TakeNoPrinter).HasMaxLength(50);
             });
 
             modelBuilder.Entity<AppLogRequest>(entity =>
