@@ -14,12 +14,6 @@ namespace FoodPos.Domain
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string MobileNo { get; set; }
-        public string TelNo { get; set; }
-        public string FaxNo { get; set; }
-        public string TaxNo { get; set; }
-        public string PostNo { get; set; }
-        public string Address { get; set; }
-        public string Contactor { get; set; }
         public string Notes { get; set; }
         public int ComId { get; set; }
         public int? WriteUserId { get; set; }

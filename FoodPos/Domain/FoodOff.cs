@@ -7,9 +7,11 @@ namespace FoodPos.Domain
     {
         public int Id { get; set; }
         public int FoodId { get; set; }
-        public int OffPrice { get; set; }
         public DateTime OffDate1 { get; set; }
         public DateTime OffDate2 { get; set; }
+        public int OffPrice1 { get; set; }
+        public int OffPrice2 { get; set; }
+        public int OffPrice3 { get; set; }
         public string Notes { get; set; }
         public int ComId { get; set; }
         public int? WriteUserId { get; set; }

@@ -149,6 +149,22 @@ namespace FoodPos.Domain
                     .HasMaxLength(50);
 
                 entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.PrinterForInvoice)
+                    .HasColumnName("printerForInvoice")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PrinterForKetchen)
+                    .HasColumnName("printerForKetchen")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PrinterForOrder)
+                    .HasColumnName("printerForOrder")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.PrinterForOrther)
+                    .HasColumnName("printerForOrther")
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<AppLogRequest>(entity =>
@@ -333,28 +349,17 @@ namespace FoodPos.Domain
 
                 entity.HasIndex(e => new { e.ComId, e.MobileNo })
                     .HasName("Customer_Index2")
-                    .IsUnique()
-                    .HasFilter("([MobileNo] IS NOT NULL)");
-
-                entity.Property(e => e.Address).HasMaxLength(50);
-
-                entity.Property(e => e.Contactor).HasMaxLength(50);
+                    .IsUnique();
 
                 entity.Property(e => e.CustomerName)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.FaxNo).HasMaxLength(50);
-
-                entity.Property(e => e.MobileNo).HasMaxLength(50);
+                entity.Property(e => e.MobileNo)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Notes).HasMaxLength(100);
-
-                entity.Property(e => e.PostNo).HasMaxLength(10);
-
-                entity.Property(e => e.TaxNo).HasMaxLength(50);
-
-                entity.Property(e => e.TelNo).HasMaxLength(50);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -439,6 +444,8 @@ namespace FoodPos.Domain
                 entity.HasIndex(e => new { e.InvoiceNo1, e.InvoiceNo2 })
                     .HasName("Invoice_Index2");
 
+                entity.Property(e => e.BuyerTaxNo).HasMaxLength(30);
+
                 entity.Property(e => e.InvoiceBigMonth)
                     .IsRequired()
                     .HasMaxLength(30);
@@ -449,9 +456,9 @@ namespace FoodPos.Domain
                     .IsRequired()
                     .HasMaxLength(10);
 
-                entity.Property(e => e.Notes).HasMaxLength(100);
+                entity.Property(e => e.InvoiceRandomNo).HasMaxLength(10);
 
-                entity.Property(e => e.TaxNo).HasMaxLength(30);
+                entity.Property(e => e.Notes).HasMaxLength(100);
 
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
@@ -817,13 +824,11 @@ namespace FoodPos.Domain
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.MobileNo).HasMaxLength(50);
+                entity.Property(e => e.MobileNo)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Notes).HasMaxLength(100);
-
-                entity.Property(e => e.TaxNo).HasMaxLength(50);
-
-                entity.Property(e => e.TelNo).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewCustomerOrderSum30D>(entity =>

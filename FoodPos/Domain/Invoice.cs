@@ -17,8 +17,9 @@ namespace FoodPos.Domain
         public int InvoiceNo2 { get; set; }
         public DateTime InvoiceDate { get; set; }
         public string InvoiceBigMonth { get; set; }
+        public string InvoiceRandomNo { get; set; }
         public int? CustomerId { get; set; }
-        public string TaxNo { get; set; }
+        public string BuyerTaxNo { get; set; }
         public int? QuestionnaireId { get; set; }
         public int DiscountAmt { get; set; }
         public int? PromotionId { get; set; }
