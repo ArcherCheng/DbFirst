@@ -7,7 +7,6 @@ namespace FoodPos.Domain
     {
         public int ComId { get; set; }
         public string ComName { get; set; }
-        public string GroupName { get; set; }
         public string ComNo { get; set; }
         public string ComPresident { get; set; }
         public string ComMaster { get; set; }
@@ -16,6 +15,7 @@ namespace FoodPos.Domain
         public string ComFax { get; set; }
         public string ComMobile { get; set; }
         public string ComIp { get; set; }
+        public string GroupName { get; set; }
         public string InvoiceTitle { get; set; }
         public string InvoiceCode { get; set; }
         public int InvoiceIdBegin { get; set; }

@@ -15,11 +15,12 @@ namespace FoodPos.Domain
         public string PromotionType { get; set; }
         public int MinOrderAmt { get; set; }
         public int PromotionPrice { get; set; }
+        public int SortOrder { get; set; }
         public bool IsOnOff { get; set; }
         public string Notes { get; set; }
         public int ComId { get; set; }
-        public int? WriteUserId { get; set; }
-        public int? WriteType { get; set; }
+        public int WriteUserId { get; set; }
+        public int WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
         public string WriteIp { get; set; }
 
