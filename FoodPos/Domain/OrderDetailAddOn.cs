@@ -11,7 +11,7 @@ namespace FoodPos.Domain
         public int ComId { get; set; }
         public int WriteUserId { get; set; }
         public int WriteType { get; set; }
-        public DateTime? WriteTime { get; set; }
+        public DateTime WriteTime { get; set; }
         public string WriteIp { get; set; }
 
         public virtual FoodTypeAddon Addon { get; set; }
