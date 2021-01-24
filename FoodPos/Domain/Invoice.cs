@@ -37,7 +37,6 @@ namespace FoodPos.Domain
 
         public virtual Customer Customer { get; set; }
         public virtual Promotion Promotion { get; set; }
-        public virtual Questionnaire Questionnaire { get; set; }
         public virtual ICollection<InvoiceAddon> InvoiceAddon { get; set; }
         public virtual ICollection<OrderMaster> OrderMaster { get; set; }
     }

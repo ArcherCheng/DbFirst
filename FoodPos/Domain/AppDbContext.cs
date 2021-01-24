@@ -785,12 +785,6 @@ namespace FoodPos.Domain
                     .WithMany(p => p.Questionnaire)
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("Questionnaire_Customer");
-
-                entity.HasOne(d => d.Invoice)
-                    .WithOne(p => p.Questionnaire)
-                    .HasForeignKey<Questionnaire>(d => d.InvoiceId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Questionnaire_Invoice");
             });
 
             modelBuilder.Entity<QuestionnaireAnswer>(entity =>

@@ -26,7 +26,6 @@ namespace FoodPos.Domain
         public string WriteIp { get; set; }
 
         public virtual Customer Customer { get; set; }
-        public virtual Invoice Invoice { get; set; }
         public virtual ICollection<QuestionnaireAnswer> QuestionnaireAnswer { get; set; }
     }
 }
