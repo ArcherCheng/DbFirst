@@ -71,6 +71,9 @@ namespace FoodPos.Domain
         public virtual DbSet<ViewOrderDetailFoodSumWeekDay2Y> ViewOrderDetailFoodSumWeekDay2Y { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumWeekDay6M> ViewOrderDetailFoodSumWeekDay6M { get; set; }
         public virtual DbSet<ViewOrderDetailFoodSumWeekDayAll> ViewOrderDetailFoodSumWeekDayAll { get; set; }
+        public virtual DbSet<ViewOrderTypeFoodSumByDate> ViewOrderTypeFoodSumByDate { get; set; }
+        public virtual DbSet<ViewOrderTypeFoodSumByMonth> ViewOrderTypeFoodSumByMonth { get; set; }
+        public virtual DbSet<ViewOrderTypeFoodSumByYear> ViewOrderTypeFoodSumByYear { get; set; }
         public virtual DbSet<ViewOrderTypeSumByDate> ViewOrderTypeSumByDate { get; set; }
         public virtual DbSet<ViewOrderTypeSumByMonth> ViewOrderTypeSumByMonth { get; set; }
         public virtual DbSet<ViewOrderTypeSumByYear> ViewOrderTypeSumByYear { get; set; }
@@ -1152,6 +1155,57 @@ namespace FoodPos.Domain
                 entity.Property(e => e.FoodName).HasMaxLength(50);
 
                 entity.Property(e => e.FoodType).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ViewOrderTypeFoodSumByDate>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewOrderTypeFoodSumByDate");
+
+                entity.Property(e => e.FoodName).HasMaxLength(50);
+
+                entity.Property(e => e.FoodType).HasMaxLength(50);
+
+                entity.Property(e => e.GroupUnit)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.OrderType).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ViewOrderTypeFoodSumByMonth>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewOrderTypeFoodSumByMonth");
+
+                entity.Property(e => e.FoodName).HasMaxLength(50);
+
+                entity.Property(e => e.FoodType).HasMaxLength(50);
+
+                entity.Property(e => e.GroupUnit)
+                    .HasMaxLength(7)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.OrderType).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ViewOrderTypeFoodSumByYear>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewOrderTypeFoodSumByYear");
+
+                entity.Property(e => e.FoodName).HasMaxLength(50);
+
+                entity.Property(e => e.FoodType).HasMaxLength(50);
+
+                entity.Property(e => e.GroupUnit)
+                    .HasMaxLength(4)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.OrderType).HasMaxLength(50);
             });
 
             modelBuilder.Entity<ViewOrderTypeSumByDate>(entity =>
