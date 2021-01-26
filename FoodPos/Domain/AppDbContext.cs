@@ -279,21 +279,35 @@ namespace FoodPos.Domain
                 entity.HasKey(e => e.UserId)
                     .HasName("AppUser_Key");
 
-                entity.HasIndex(e => e.Email)
-                    .HasName("AppUser_Index1")
+                entity.HasIndex(e => new { e.ComNo, e.Email })
+                    .HasName("AppUser_Index4")
                     .IsUnique();
 
-                entity.HasIndex(e => e.Phone)
+                entity.HasIndex(e => new { e.ComNo, e.Phone })
+                    .HasName("AppUser_Index3")
+                    .IsUnique();
+
+                entity.HasIndex(e => new { e.ComNo, e.UserName })
                     .HasName("AppUser_Index2")
                     .IsUnique();
 
+                entity.HasIndex(e => new { e.ComNo, e.UserNo })
+                    .HasName("AppUser_Index1")
+                    .IsUnique();
+
                 entity.Property(e => e.Birthday).HasMaxLength(50);
+
+                entity.Property(e => e.ComNo)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.Email)
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.IsOnOff).HasDefaultValueSql("((1))");
+                entity.Property(e => e.IsOnOff)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.LoginDate).HasColumnType("datetime");
 
@@ -312,6 +326,10 @@ namespace FoodPos.Domain
                 entity.Property(e => e.UserData).HasMaxLength(100);
 
                 entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.UserNo)
                     .IsRequired()
                     .HasMaxLength(50);
 
