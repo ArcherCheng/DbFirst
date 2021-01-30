@@ -171,27 +171,15 @@ namespace JustDo.Party.Domain
                 entity.HasKey(e => e.UserId)
                     .HasName("AppUser_Key");
 
-                entity.HasIndex(e => new { e.ComNo, e.Email })
-                    .HasName("AppUser_Index4")
-                    .IsUnique();
-
-                entity.HasIndex(e => new { e.ComNo, e.Phone })
-                    .HasName("AppUser_Index3")
-                    .IsUnique();
-
-                entity.HasIndex(e => new { e.ComNo, e.UserName })
+                entity.HasIndex(e => e.Email)
                     .HasName("AppUser_Index2")
                     .IsUnique();
 
-                entity.HasIndex(e => new { e.ComNo, e.UserNo })
+                entity.HasIndex(e => e.Phone)
                     .HasName("AppUser_Index1")
                     .IsUnique();
 
                 entity.Property(e => e.Birthday).HasMaxLength(50);
-
-                entity.Property(e => e.ComNo)
-                    .IsRequired()
-                    .HasMaxLength(50);
 
                 entity.Property(e => e.Email)
                     .IsRequired()
@@ -218,10 +206,6 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.UserData).HasMaxLength(100);
 
                 entity.Property(e => e.UserName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.UserNo)
                     .IsRequired()
                     .HasMaxLength(50);
 

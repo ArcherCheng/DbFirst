@@ -11,8 +11,6 @@ namespace JustDo.Party.Domain
         }
 
         public int UserId { get; set; }
-        public string ComNo { get; set; }
-        public string UserNo { get; set; }
         public string UserName { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
