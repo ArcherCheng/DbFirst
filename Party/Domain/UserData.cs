@@ -46,8 +46,8 @@ namespace JustDo.Party.Domain
         public string LikeCondition { get; set; }
         public string BankName { get; set; }
         public string BankNumber6 { get; set; }
-        public bool IsCloseData { get; set; }
-        public bool IsClosePhoto { get; set; }
+        public bool IsOnOffData { get; set; }
+        public bool IsOnOffPhoto { get; set; }
         public string IdPhoto11Url { get; set; }
         public string IdPhoto12Url { get; set; }
         public string JobPhotoUrl { get; set; }
