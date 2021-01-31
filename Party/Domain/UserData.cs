@@ -35,6 +35,7 @@ namespace JustDo.Party.Domain
         public string School { get; set; }
         public string Subjects { get; set; }
         public string JobType { get; set; }
+        public string WorkType { get; set; }
         public string Religion { get; set; }
         public int? Salary { get; set; }
         public string Personality { get; set; }

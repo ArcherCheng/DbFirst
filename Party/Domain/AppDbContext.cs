@@ -35,6 +35,7 @@ namespace JustDo.Party.Domain
         public virtual DbSet<UserData> UserData { get; set; }
         public virtual DbSet<UserMatch> UserMatch { get; set; }
         public virtual DbSet<UserPhoto> UserPhoto { get; set; }
+        public virtual DbSet<ViewPartyChatSum> ViewPartyChatSum { get; set; }
         public virtual DbSet<ViewPartyMatchUser> ViewPartyMatchUser { get; set; }
         public virtual DbSet<ViewPartyMatches> ViewPartyMatches { get; set; }
         public virtual DbSet<ViewPartySumAll> ViewPartySumAll { get; set; }
@@ -608,6 +609,8 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.Technique).HasMaxLength(50);
 
+                entity.Property(e => e.WorkType).HasMaxLength(50);
+
                 entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
@@ -647,6 +650,13 @@ namespace JustDo.Party.Domain
                     .HasForeignKey(d => d.UserId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("UserPhoto_UserData");
+            });
+
+            modelBuilder.Entity<ViewPartyChatSum>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewPartyChatSum");
             });
 
             modelBuilder.Entity<ViewPartyMatchUser>(entity =>
