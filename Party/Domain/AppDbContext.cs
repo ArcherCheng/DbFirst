@@ -43,6 +43,7 @@ namespace JustDo.Party.Domain
         public virtual DbSet<ViewPartySumGirl> ViewPartySumGirl { get; set; }
         public virtual DbSet<ViewPartySummary> ViewPartySummary { get; set; }
         public virtual DbSet<ViewPartyVoteCount> ViewPartyVoteCount { get; set; }
+        public virtual DbSet<ViewPartyVoteSum> ViewPartyVoteSum { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -287,7 +288,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.SendDate).HasColumnType("datetime");
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -334,6 +335,10 @@ namespace JustDo.Party.Domain
                     .IsRequired()
                     .HasMaxLength(8);
 
+                entity.Property(e => e.IsOnOff)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.Notes).HasMaxLength(250);
 
                 entity.Property(e => e.PartyDate).HasColumnType("datetime");
@@ -346,7 +351,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.Restaurant).HasMaxLength(50);
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -364,7 +369,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.PublicId).HasMaxLength(250);
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -388,7 +393,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.UserId).HasColumnName("userId");
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -423,15 +428,15 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.BankName).HasMaxLength(50);
 
-                entity.Property(e => e.BankNote).HasMaxLength(64);
+                entity.Property(e => e.BankNote).HasMaxLength(50);
 
                 entity.Property(e => e.BankNumber6).HasMaxLength(50);
 
                 entity.Property(e => e.FriendsName).HasMaxLength(50);
 
-                entity.Property(e => e.Notes).HasMaxLength(128);
+                entity.Property(e => e.Notes).HasMaxLength(100);
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -458,7 +463,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.VoteDate).HasColumnType("datetime");
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -499,7 +504,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.SendDate).HasColumnType("datetime");
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -525,17 +530,17 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.UserId).ValueGeneratedNever();
 
-                entity.Property(e => e.BloodInclude).HasMaxLength(16);
+                entity.Property(e => e.BloodInclude).HasMaxLength(50);
 
-                entity.Property(e => e.CityInclude).HasMaxLength(128);
+                entity.Property(e => e.CityInclude).HasMaxLength(250);
 
-                entity.Property(e => e.JobTypeInclude).HasMaxLength(128);
+                entity.Property(e => e.JobTypeInclude).HasMaxLength(250);
 
-                entity.Property(e => e.ReligionInclude).HasMaxLength(128);
+                entity.Property(e => e.ReligionInclude).HasMaxLength(250);
 
-                entity.Property(e => e.StarInclude).HasMaxLength(128);
+                entity.Property(e => e.StarInclude).HasMaxLength(250);
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -578,6 +583,14 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.Interest).HasMaxLength(50);
 
                 entity.Property(e => e.Introduction).HasMaxLength(2000);
+
+                entity.Property(e => e.IsOnOffData)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.IsOnOffPhoto)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.JobPhotoUrl).HasMaxLength(250);
 
@@ -629,6 +642,11 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+
+                entity.HasOne(d => d.Match)
+                    .WithMany(p => p.UserMatch)
+                    .HasForeignKey(d => d.MatchId)
+                    .HasConstraintName("UserMatch_MatchUser");
             });
 
             modelBuilder.Entity<UserPhoto>(entity =>
@@ -639,7 +657,7 @@ namespace JustDo.Party.Domain
 
                 entity.Property(e => e.PublicId).HasMaxLength(250);
 
-                entity.Property(e => e.WriteIp).HasMaxLength(32);
+                entity.Property(e => e.WriteIp).HasMaxLength(50);
 
                 entity.Property(e => e.WriteTime)
                     .HasColumnType("datetime")
@@ -720,6 +738,13 @@ namespace JustDo.Party.Domain
                 entity.Property(e => e.PartyId).HasColumnName("partyId");
 
                 entity.Property(e => e.Sex).HasColumnName("sex");
+            });
+
+            modelBuilder.Entity<ViewPartyVoteSum>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("ViewPartyVoteSum");
             });
 
             OnModelCreatingPartial(modelBuilder);

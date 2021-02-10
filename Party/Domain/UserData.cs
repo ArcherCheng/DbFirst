@@ -15,6 +15,7 @@ namespace JustDo.Party.Domain
             PartyVoteVote = new HashSet<PartyVote>();
             UserChatRecipient = new HashSet<UserChat>();
             UserChatSender = new HashSet<UserChat>();
+            UserMatch = new HashSet<UserMatch>();
             UserPhoto = new HashSet<UserPhoto>();
         }
 
@@ -46,8 +47,8 @@ namespace JustDo.Party.Domain
         public string LikeCondition { get; set; }
         public string BankName { get; set; }
         public string BankNumber6 { get; set; }
-        public bool IsOnOffData { get; set; }
-        public bool IsOnOffPhoto { get; set; }
+        public bool? IsOnOffData { get; set; }
+        public bool? IsOnOffPhoto { get; set; }
         public string IdPhoto11Url { get; set; }
         public string IdPhoto12Url { get; set; }
         public string JobPhotoUrl { get; set; }
@@ -72,6 +73,7 @@ namespace JustDo.Party.Domain
         public virtual ICollection<PartyVote> PartyVoteVote { get; set; }
         public virtual ICollection<UserChat> UserChatRecipient { get; set; }
         public virtual ICollection<UserChat> UserChatSender { get; set; }
+        public virtual ICollection<UserMatch> UserMatch { get; set; }
         public virtual ICollection<UserPhoto> UserPhoto { get; set; }
     }
 }

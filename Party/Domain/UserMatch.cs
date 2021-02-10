@@ -12,5 +12,7 @@ namespace JustDo.Party.Domain
         public int WriteType { get; set; }
         public DateTime? WriteTime { get; set; }
         public string WriteIp { get; set; }
+
+        public virtual UserData Match { get; set; }
     }
 }

@@ -28,6 +28,7 @@ namespace JustDo.Party.Domain
         public int? GirlSalary { get; set; }
         public int? GirlHeights { get; set; }
         public int? GirlWeights { get; set; }
+        public int? TotalChats { get; set; }
         public int? TotalVotes { get; set; }
         public int? TotalMatches { get; set; }
     }
